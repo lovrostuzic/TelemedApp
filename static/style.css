@@ -1,0 +1,5 @@
+ .form-element{
+      display: inline-block; /* Postavljanje paragrafa u isti red */
+      width: 150px; /* Širina paragrafa za oznaku (Sistolički tlak, Dijastolički tlak, Broj otkucaja srca) */
+      margin: 5px 0; /* Margine za paragraf */
+    }
