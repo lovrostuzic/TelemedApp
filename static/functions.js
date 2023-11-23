@@ -13,3 +13,6 @@ function login() {
 function dodajPacijenta(){
 window.location.href = "newPatient.html";
 }
+function showHistory(){
+window.location.href = "patientHistory.html";
+}

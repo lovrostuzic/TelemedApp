@@ -12,3 +12,8 @@
        background-color: darkred;
        border-color: darkred;
     }
+  textarea {
+      width: 500px;
+      resize: vertical;
+        min-height: 100px;
+    }
