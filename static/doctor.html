@@ -5,10 +5,37 @@
     <script src="functions.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <title>Doctor</title>
 </head>
 <body>
-<h2></h2>
-
+<div class="container">
+    <div class="row justify-content-start">
+        <div class="col-md-10">
+            <h1></h1>
+        <h2>Mirela Grbić</h2>
+    <h3>Popis pacijenata:</h3><br>
+    <form action="/">
+        <label for="search">Pretraži:</label>
+        <input type="search" id="search" name="search">
+        <input type="submit" value="Pretraži">
+    </form>
+    <br>
+    <button name="button" class="btn btn-primary" type="button" onclick="dodajPacijenta()">Dodaj pacijenta</button>
+    <br><br>
+    <p class="form-element">Darko Darkić</p>
+    <button name="button" class="btn btn-primary" type="button" onclick="pregledZapisa()">Pregled zapisa</button>
+    <br>
+    <br>
+    <p class="form-element">Marko Markić</p>
+    <button name="button" class="btn btn-primary" type="button" onclick="pregledZapisa()">Pregled zapisa</button>
+    <br>
+    <br>
+    <p class="form-element">Ivica Ivić</p>
+    <button name="button" class="btn btn-primary" type="button" onclick="pregledZapisa()">Pregled zapisa</button>
+    <br>
+        </div>
+    </div>
+</div>
 </body>
 </html>
