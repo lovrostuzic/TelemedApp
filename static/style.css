@@ -3,3 +3,12 @@
       width: 150px; /* Širina paragrafa za oznaku (Sistolički tlak, Dijastolički tlak, Broj otkucaja srca) */
       margin: 5px 0; /* Margine za paragraf */
     }
+
+  .btn-primary {
+      background-color: red;
+      border-color: red;
+   }
+   .btn-primary:hover {
+       background-color: darkred;
+       border-color: darkred;
+    }
