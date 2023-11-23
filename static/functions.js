@@ -10,3 +10,6 @@ function login() {
         alert("Wrong E-mail or password");
     }
 }
+function dodajPacijenta(){
+window.location.href = "newPatient.html";
+}
