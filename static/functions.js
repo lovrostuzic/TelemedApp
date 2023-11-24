@@ -16,3 +16,6 @@ window.location.href = "newPatient.html";
 function showHistory(){
 window.location.href = "patientHistory.html";
 }
+function pregledZapisa(){
+window.location.href = "doctorPatientHistory.html";
+}
