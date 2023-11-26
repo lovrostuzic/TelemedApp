@@ -101,11 +101,11 @@ window.onload = function() {
 function patientNewHistory() {
  window.location.href = "patientHistory.html";
 
-  var sistolickiTlak = document.getElementById('sistlak').value;
-  var dijastolickiTlak = document.getElementById('dijtlak').value;
-  var brojOtkucajaSrca = document.getElementById('heartrate').value;
-
-  var table = document.getElementById('patient_table');
+  var sistolickiTlak = document.getElementById("sistlak").value;
+  var dijastolickiTlak = document.getElementById("dijtlak").value;
+  var brojOtkucajaSrca = document.getElementById("heartrate").value;
+  var description = document.getElementById("description")
+  var table = document.getElementById("patient_table");
   var newRow = table.insertRow(-1);
 
   var cell1 = newRow.insertCell(0);
@@ -114,10 +114,10 @@ function patientNewHistory() {
   var cell4 = newRow.insertCell(3);
   var cell5 = newRow.insertCell(4);
 
-  cell1.textContent = 'Novi red';
+  cell1.textContent = "1";
   cell2.textContent = sistolickiTlak;
   cell3.textContent = dijastolickiTlak;
   cell4.textContent = brojOtkucajaSrca;
-  cell5.textContent = 'Ostali podaci...';
+  cell5.textContent = description;
 
   }
