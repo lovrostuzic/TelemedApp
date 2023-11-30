@@ -4,7 +4,7 @@ function login() {
 
     if (mail === "user" && password === "user") {
         window.location.href = "patient.html";
-    }if (mail === "admin" && password === "admin") {
+    }else if(mail === "admin" && password === "admin") {
         window.location.href = "doctor.html";
     } else {
         alert("Wrong E-mail or password");
