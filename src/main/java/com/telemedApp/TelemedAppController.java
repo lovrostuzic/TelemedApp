@@ -17,11 +17,10 @@ public class TelemedAppController {
     public void login() {
     }
 
-
     @GetMapping("/patient")
     public String measurements(Model model) {
         model.addAttribute(measurementList);
-        return "patientHistory.html";
+        return "patient.html";
     }
 
     @GetMapping("/addNewMeasurement")
