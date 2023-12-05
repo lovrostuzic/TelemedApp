@@ -8,6 +8,7 @@ public class TelemedApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TelemedApplication.class, args);
+        System.out.println("Startup successful!");
     }
 
 }

@@ -11,16 +11,31 @@ import java.util.List;
 @Controller
 public class TelemedAppController {
     List<Measurement> measurementList = new ArrayList<>();
-
+    Patient patient = new Patient(1, "Darko", "Darkić", "10.08.1978", "12345678910", "0957003637", "darkodarkic@gmail.com", "darkodarkic");
+    Doctor doctor = new Doctor("Mirela", "Grbić", "mirelagrbic@gmail.com", "mirelagrbic");
+    List<Patient> patientList = new ArrayList<>();
 
     @GetMapping("/login")
-    public void login() {
+    public String login(@RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
+        if (email.equals(patient.getEmail()) && password.equals(patient.getPassword())) {
+            return "redirect:/patient";
+        } else if (email.equals(doctor.getEmail()) && password.equals(doctor.getPassword())) {
+            return "redirect:/doctor";
+        }
+        return "login.html";
     }
 
-    @GetMapping("/patient")
+    @GetMapping("/patientHistory")
     public String measurements(Model model) {
         model.addAttribute(measurementList);
-        return "patient.html";
+        return "patientHistory.html";
+    }
+
+    @GetMapping("/doctor")
+    public String patients(Model model) {
+        patientList.add(patient);
+        model.addAttribute(patientList);
+        return "doctor.html";
     }
 
     @GetMapping("/addNewMeasurement")
@@ -30,7 +45,7 @@ public class TelemedAppController {
     }
 
     @GetMapping("/delete")
-    public String deleteTodo(@RequestParam("measurementNumber") int mN) {
+    public String delete(@RequestParam("measurementNumber") int mN) {
         for (Measurement measurement : measurementList) {
             if (measurement.getMeasurementNumber() == mN) {
                 measurementList.remove(measurement);
@@ -38,6 +53,24 @@ public class TelemedAppController {
             }
         }
         return "redirect:/patientHistory";
+
+    }
+
+    @GetMapping("/lookRecords")
+    public String records(Model model) {
+        model.addAttribute(measurementList);
+        return "doctorPatientHistory.html";
+    }
+
+    @GetMapping("/deletePatient")
+    public String deletePatient(@RequestParam("patient.number") int num) {
+        for (Patient patient : patientList) {
+            if (patient.getNumber() == num) {
+                patientList.remove(patient);
+                break;
+            }
+        }
+        return "redirect:/doctor";
 
     }
 }
