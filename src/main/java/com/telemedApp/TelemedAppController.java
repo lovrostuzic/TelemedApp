@@ -20,18 +20,25 @@ public class TelemedAppController {
         if (email.equals(patient.getEmail()) && password.equals(patient.getPassword())) {
             return "redirect:/patient";
         } else if (email.equals(doctor.getEmail()) && password.equals(doctor.getPassword())) {
-            return "redirect:/doctor";
-        }
-        else {
+            return "redirect:/doctorPocetna";
+        } else {
             return "login.html";
         }
     }
 
     @GetMapping("/pocetna")
-    public String pocetna(){
+    public String pocetna() {
         return "login.html";
     }
-
+    @GetMapping("/patient")
+    public String patient(Model model) {
+        return "patient.html";
+    }
+    @GetMapping("/addNewMeasurement")
+    public String addNewTodo(@RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
+        measurementList.add(new Measurement(measurementList.size() + 1, sisPress, dijPress, heartRate, desc));
+        return "redirect:/patient";
+    }
     @GetMapping("/patientHistory")
     public String measurements(Model model) {
         model.addAttribute(measurementList);
@@ -45,10 +52,11 @@ public class TelemedAppController {
         return "doctor.html";
     }
 
-    @GetMapping("/addNewMeasurement")
-    public String addNewTodo(@RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
-        measurementList.add(new Measurement(measurementList.size() + 1, sisPress, dijPress, heartRate, desc));
-        return "redirect:/patient";
+    @GetMapping("/doctorPocetna")
+    public String doctorPocetna(Model model) {
+        patientList.add(patient);
+        model.addAttribute(patientList);
+        return "doctor.html";
     }
 
     @GetMapping("/delete")

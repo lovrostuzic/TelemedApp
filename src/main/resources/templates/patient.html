@@ -26,24 +26,22 @@
                     </div>
                 </div>
             </div>
-            <button name="button" class="btn btn-primary" type="button" onclick="showHistory(); popuniRedove();
-">Prikaži povijest
-            </button>
-            <button name="button" class="btn btn-primary" type="button" onclick="newTermin()">Zakaži termin</button>
+            <form action="/patientHistory"><button name="button" class="btn btn-primary" type="submit">Prikaži povijest</button>
+            </form>
             <br><br>
             <p class="form-element">Sistolički tlak:</p>
             <p class="form-element">Dijastolički tlak:</p>
             <p class="form-element">Broj otkucaja srca:</p><br>
-            <input type="number" id="sistlak" class="form-element" name="sisPress">
-            <input type="number" id="dijtlak" class="form-element" name="dijPress">
-            <input type="number" id="heartrate" class="form-element" name="heartRate">
-            <br><br>
-            <p>Kratki opis:</p>
-            <textarea id="description" placeholder="Kratki opis" name="desc"></textarea><br><br>
-            <input type="datetime-local" id="date">
-            <br>
             <form action="/addNewMeasurement">
-                <button name="button" class="btn btn-primary" type="button" onclick="patientNewHistory()">Podnesi
+                <input type="number" id="sistlak" class="form-element" name="sisPress">
+                <input type="number" id="dijtlak" class="form-element" name="dijPress">
+                <input type="number" id="heartrate" class="form-element" name="heartRate">
+                <br><br>
+                <p>Kratki opis:</p>
+                <textarea id="description" placeholder="Kratki opis" name="desc"></textarea><br><br>
+                <input type="datetime-local" id="date">
+                <br>
+                <button name="button" class="btn btn-primary" type="submit">Podnesi
                 </button>
                 <br>
             </form>

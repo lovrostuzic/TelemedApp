@@ -38,17 +38,14 @@
                     <th>Pregledaj zapise</th>
                     <th>Izbriši</th>
                 </tr>
-                <tr>
-                    <td th:each="patient: ${patientList}"></td>
+                <tr
+                     th:each="patient: ${patientList}">
                     <td th:text="${patient.name + ' ' + patient.lastName}"></td>
-                    <td th:text="${<td><a th:hrefVide=@{/lookRecords?= + ${patient.name + ' ' + patient.lastName}}">Pregledaj zapise</a></td></td>
-                    <td th:text="${<td><a th:hrefVide=@{/deletePatient?= + ${patient.name + ' ' + patient.lastName}}">Izbriši </a></td></td>
+                    <td th:hrefVide="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">Pregledaj zapise</a></td><
+                    <td th:hrefVide="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">Izbriši </a></td>
 
                 </tr>
             </table>
-
-            <button name="button" class="btn btn-primary" type="button" onclick="pregledZapisa()">Pregled zapisa
-            </button>
             <br>
         </div>
     </div>
