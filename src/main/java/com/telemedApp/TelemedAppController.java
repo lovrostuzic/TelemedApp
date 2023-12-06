@@ -22,6 +22,13 @@ public class TelemedAppController {
         } else if (email.equals(doctor.getEmail()) && password.equals(doctor.getPassword())) {
             return "redirect:/doctor";
         }
+        else {
+            return "login.html";
+        }
+    }
+
+    @GetMapping("/pocetna")
+    public String pocetna(){
         return "login.html";
     }
 
