@@ -50,16 +50,12 @@ public class TelemedAppController {
         Patient newPatient =new Patient(patientList.size()+1,name,lastName,dateOfBirth,oib,phoneNumber,email,pass);
         patientList.add(patient);
         return "redirect:/doctor";
-
     }
-
-
     @GetMapping("/patientHistory")
     public String measurements(Model model) {
         model.addAttribute(measurementList);
         return "patientHistory.html";
     }
-
     @GetMapping("/doctor")
     public String patients(Model model) {
         patientList.add(patient);
@@ -83,9 +79,7 @@ public class TelemedAppController {
             }
         }
         return "redirect:/patientHistory";
-
     }
-
     @GetMapping("/lookRecords")
     public String records(Model model) {
         model.addAttribute(measurementList);
@@ -101,6 +95,5 @@ public class TelemedAppController {
             }
         }
         return "redirect:/doctor";
-
     }
 }
