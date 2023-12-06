@@ -39,6 +39,21 @@ public class TelemedAppController {
         measurementList.add(new Measurement(measurementList.size() + 1, sisPress, dijPress, heartRate, desc));
         return "redirect:/patient";
     }
+    @GetMapping("/goToNewP")
+    public String goToNewP() {
+        return "newPatient.html";
+    }
+    @GetMapping("/addNewPatient")
+    public String addNewPatient(@RequestParam("newPatientName" )String name,@RequestParam("newPatientLastName") String lastName,
+                                @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
+    @RequestParam("newMobilePhone") String phoneNumber,@RequestParam("email") String email, @RequestParam("password") String pass){
+        Patient newPatient =new Patient(patientList.size()+1,name,lastName,dateOfBirth,oib,phoneNumber,email,pass);
+        patientList.add(patient);
+        return "redirect:/doctor";
+
+    }
+
+
     @GetMapping("/patientHistory")
     public String measurements(Model model) {
         model.addAttribute(measurementList);

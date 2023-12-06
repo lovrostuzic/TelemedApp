@@ -12,6 +12,7 @@
 <div class="container">
     <div class="row justify-content-start">
         <div class="col-md-10">
+            <br>
             <div class="container">
                 <div class="row">
                     <div class="row justify-content-start">
@@ -26,17 +27,31 @@
                     </div>
                 </div>
             </div>
-            <form action="/patientHistory"><button name="button" class="btn btn-primary" type="submit">Prikaži povijest</button>
+            <form action="/patientHistory">
+                <button name="button" class="btn btn-primary" type="submit">Prikaži povijest</button>
             </form>
-            <br><br>
-            <p class="form-element">Sistolički tlak:</p>
-            <p class="form-element">Dijastolički tlak:</p>
-            <p class="form-element">Broj otkucaja srca:</p><br>
-            <form action="/addNewMeasurement">
-                <input type="number" id="sistlak" class="form-element" name="sisPress">
-                <input type="number" id="dijtlak" class="form-element" name="dijPress">
-                <input type="number" id="heartrate" class="form-element" name="heartRate">
-                <br><br>
+                <div class="container">
+                    <div class="row">
+                        <div class="row justify-content-start">
+                            <div class="col-10">
+                                <form action="/addNewMeasurement">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>Sistolički tlak:</th>
+                                        <th>Dijastolički tlak:</th>
+                                        <th>Broj otkucaja srca:</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="number" id="sistlak" class="form-element" name="sisPress"></td>
+                                        <td><input type="number" id="dijtlak" class="form-element" name="dijPress"></td>
+                                        <td><input type="number" id="heartrate" class="form-element" name="heartRate">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <p>Kratki opis:</p>
                 <textarea id="description" placeholder="Kratki opis" name="desc"></textarea><br><br>
                 <input type="datetime-local" id="date">
@@ -45,8 +60,6 @@
                 </button>
                 <br>
             </form>
-
-            <p></p>
         </div>
     </div>
 </div>

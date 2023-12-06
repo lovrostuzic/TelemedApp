@@ -14,6 +14,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
+                    <br><br>
                     <div class="col-8" style="float: left;">
                         <h2>Mirela Grbić</h2>
                     </div>
@@ -22,17 +23,18 @@
                     </div>
                 </div>
             </div>
-            <h3>Popis pacijenataa:</h3><br>
-            <form action="/">
+            <br>
+            <h3>Popis pacijenata:</h3><br>
                 <label for="search">Pretraži:</label>
                 <input type="search" id="search" name="search">
                 <input type="submit" value="Pretraži">
-            </form>
-            <br>
-            <button name="button" class="btn btn-primary" type="button" onclick="dodajPacijenta()">Dodaj pacijenta
+                      <br>
+            <form action="/goToNewP">
+            <button name="button" class="btn btn-primary" type="submit">Dodaj pacijenta
             </button>
+            </form>
             <br><br>
-            <table>
+            <table id="doctorsPatientList" class="table table-striped">
                 <tr>
                     <th>Ime i prezime:</th>
                     <th>Pregledaj zapise</th>
@@ -43,7 +45,6 @@
                     <td th:text="${patient.name + ' ' + patient.lastName}"></td>
                     <td th:hrefVide="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">Pregledaj zapise</a></td><
                     <td th:hrefVide="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">Izbriši </a></td>
-
                 </tr>
             </table>
             <br>
