@@ -25,7 +25,6 @@ public class TelemedAppController {
             return "login.html";
         }
     }
-
     @GetMapping("/pocetna")
     public String pocetna() {
         return "login.html";

@@ -52,7 +52,7 @@
                         <td th:text="${measurement.dijPressure}"></td>
                         <td th:text="${measurement.heartbeat}"></td>
                         <td th:text="${measurement.desc}"></td>
-                        <td><a th:hrefVide="@{'/delete?measurementNumber=' + ${measurement.measurementNumber}}">Izbriši</a></td>
+                        <td><a th:href="@{'/delete?measurementNumber=' + ${measurement.measurementNumber}}">Izbriši</a></td>
                 </table>
             </div>
         </div>
