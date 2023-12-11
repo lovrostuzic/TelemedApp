@@ -41,11 +41,9 @@
                 </tr>
                 <tr th:each="patient: ${patientList}">
                     <td th:text="${patient.name + ' ' + patient.lastName}"></td>
-                    <td th:href="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">
+                    <td <a th:href="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">
                         Pregledaj zapise</a></td>
-                    <
-                    <td th:href="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">
-                        Izbriši </a></td>
+                    <td <a th:href="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}" >Izbriši</a></td>
                 </tr>
             </table>
             <br>
