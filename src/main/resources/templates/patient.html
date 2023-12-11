@@ -30,11 +30,11 @@
             <form action="/patientHistory">
                 <button name="button" class="btn btn-primary" type="submit">Prikaži povijest</button>
             </form>
-                <div class="container">
-                    <div class="row">
-                        <div class="row justify-content-start">
-                            <div class="col-10">
-                                <form action="/addNewMeasurement">
+            <div class="container">
+                <div class="row">
+                    <div class="row justify-content-start">
+                        <div class="col-10">
+                            <form action="/addNewMeasurement">
                                 <table class="table table-striped">
                                     <tr>
                                         <th>Sistolički tlak:</th>
@@ -48,19 +48,19 @@
                                         </td>
                                     </tr>
                                 </table>
-                                </form>
-                            </div>
+
+                                <p>Kratki opis:</p>
+                                <textarea id="description" placeholder="Kratki opis" name="desc"></textarea><br><br>
+                                <input type="datetime-local" id="date">
+                                <br>
+                                <button name="button" class="btn btn-primary" type="submit">Podnesi
+                                </button>
+                                <br>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <p>Kratki opis:</p>
-                <textarea id="description" placeholder="Kratki opis" name="desc"></textarea><br><br>
-                <input type="datetime-local" id="date">
-                <br>
-                <button name="button" class="btn btn-primary" type="submit">Podnesi
-                </button>
-                <br>
-            </form>
+            </div>
         </div>
     </div>
 </div>
