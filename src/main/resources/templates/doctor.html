@@ -9,7 +9,7 @@
     <title>Doctor</title>
 </head>
 <body>
-<div class="container">
+<div class="container ">
     <div class="row justify-content-start">
         <div class="container">
             <div class="row">
@@ -41,9 +41,8 @@
                 </tr>
                 <tr th:each="patient: ${patientList}">
                     <td th:text="${patient.name + ' ' + patient.lastName}"></td>
-                    <td <a th:href="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">
-                        Pregledaj zapise</a></td>
-                    <td <a th:href="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}" >Izbriši</a></td>
+                    <td th:href="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">Pregledaj zapise</td>
+                    <td th:href="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}" >Izbriši</td>
                 </tr>
             </table>
             <br>
@@ -51,4 +50,53 @@
     </div>
 </div>
 </body>
+<style>
+    .form-element{
+     display: inline-block;
+     width: 150px;
+     margin: 5px 0;
+   }
+
+ .btn-primary {
+     background-color: red;
+     border-color: red;
+  }
+  .btn-primary:hover {
+   transform: scale(1.01);
+  transition: transform 0.3s ease;
+      background-color: darkred;
+      border-color: darkred;
+   }
+ textarea {
+     width: 500px;
+     resize: vertical;
+       min-height: 100px;
+   }
+   body {
+        background-color: red;
+   }
+
+  .container {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+
+
+/* Dodavanje pozadinske boje i promjena boje teksta unutar containera */
+.container {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.container {
+  margin-bottom: 20px;
+}
+
+.container {
+  padding: 20px;
+}
+
+
+</style>
 </html>
