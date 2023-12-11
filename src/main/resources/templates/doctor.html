@@ -25,26 +25,27 @@
             </div>
             <br>
             <h3>Popis pacijenata:</h3><br>
-                <label for="search">Pretraži:</label>
-                <input type="search" id="search" name="search">
-                <input type="submit" value="Pretraži">
-                      <br>
-            <form action="/goToNewP">
-            <button name="button" class="btn btn-primary" type="submit">Dodaj pacijenta
-            </button>
+            <label for="search">Pretraži:</label>
+            <input type="search" id="search" name="search">
+            <input type="submit" value="Pretraži">
+            <form action="goToNewP">
+                <br>
+                <button name="button" class="btn btn-primary" type="submit">Dodaj pacijenta</button>
             </form>
-            <br><br>
+            <br>
             <table id="doctorsPatientList" class="table table-striped">
                 <tr>
                     <th>Ime i prezime:</th>
                     <th>Pregledaj zapise</th>
                     <th>Izbriši</th>
                 </tr>
-                <tr
-                     th:each="patient: ${patientList}">
+                <tr th:each="patient: ${patientList}">
                     <td th:text="${patient.name + ' ' + patient.lastName}"></td>
-                    <td th:href="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">Pregledaj zapise</a></td><
-                    <td th:href="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">Izbriši </a></td>
+                    <td th:href="@{'/lookRecords?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">
+                        Pregledaj zapise</a></td>
+                    <
+                    <td th:href="@{'/deletePatient?=name' + ' ' + 'lastName + ${patient.name' + ' ' + 'patient.lastName}}">
+                        Izbriši </a></td>
                 </tr>
             </table>
             <br>

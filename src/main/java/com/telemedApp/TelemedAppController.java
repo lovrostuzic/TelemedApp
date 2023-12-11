@@ -25,39 +25,45 @@ public class TelemedAppController {
             return "login.html";
         }
     }
+
     @GetMapping("/pocetna")
     public String pocetna() {
         return "login.html";
     }
+
     @GetMapping("/patient")
     public String patient(Model model) {
         return "patient.html";
     }
+
     @GetMapping("/addNewMeasurement")
     public String addNewTodo(@RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
         measurementList.add(new Measurement(measurementList.size() + 1, sisPress, dijPress, heartRate, desc));
         return "redirect:/patient";
     }
+
     @GetMapping("/goToNewP")
     public String goToNewP() {
         return "newPatient.html";
     }
+
     @GetMapping("/addNewPatient")
-    public String addNewPatient(@RequestParam("newPatientName" )String name,@RequestParam("newPatientLastName") String lastName,
+    public String addNewPatient(@RequestParam("newPatientName") String name, @RequestParam("newPatientLastName") String lastName,
                                 @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
-    @RequestParam("newMobilePhone") String phoneNumber,@RequestParam("email") String email, @RequestParam("password") String pass){
-        Patient newPatient =new Patient(patientList.size()+1,name,lastName,dateOfBirth,oib,phoneNumber,email,pass);
-        patientList.add(patient);
+                                @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass) {
+        Patient newPatient = new Patient(patientList.size() + 1, name, lastName, dateOfBirth, oib, phoneNumber, email, pass);
+        patientList.add(newPatient);
         return "redirect:/doctor";
     }
+
     @GetMapping("/patientHistory")
     public String measurements(Model model) {
         model.addAttribute(measurementList);
         return "patientHistory.html";
     }
+
     @GetMapping("/doctor")
     public String patients(Model model) {
-        patientList.add(patient);
         model.addAttribute(patientList);
         return "doctor.html";
     }
@@ -79,6 +85,7 @@ public class TelemedAppController {
         }
         return "redirect:/patientHistory";
     }
+
     @GetMapping("/lookRecords")
     public String records(Model model) {
         model.addAttribute(measurementList);
