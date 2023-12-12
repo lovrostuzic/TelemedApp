@@ -11,19 +11,24 @@ import java.util.List;
 @Controller
 public class TelemedAppController {
     List<Measurement> measurementList = new ArrayList<>();
-    Patient patient = new Patient(1, "Darko", "Darkić", "10.08.1978", "12345678910", "0957003637", "darkodarkic@gmail.com", "darkodarkic");
-    Doctor doctor = new Doctor("Mirela", "Grbić", "mirelagrbic@gmail.com", "mirelagrbic");
-    List<Patient> patientList = new ArrayList<>();
+    User patient = new User( "Darko", "Darkić", "10.08.1978", "12345678910", "0957003637", "darkodarkic@gmail.com", "darkodarkic",0);
+    User doctor = new User ("Mirela", "Grbić", "12.12.1989","12312311233","0999999999","mirelagrbic@gmail.com", "mirelagrbic",1);
+    List<User> userList = new ArrayList<>();
+
+
 
     @GetMapping("/login")
     public String login(@RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
-        if (email.equals(patient.getEmail()) && password.equals(patient.getPassword())) {
+      String a = "login.html";
+       for(User user : userList)
+        if (email.equals(user.getEmail()) && password.equals(user.getPassword())&& user.getPod()==0) {
             return "redirect:/patient";
-        } else if (email.equals(doctor.getEmail()) && password.equals(doctor.getPassword())) {
+        } else if (email.equals(user.getEmail()) && password.equals(user.getPassword())&& user.getPod()==1) {
             return "redirect:/doctorPocetna";
         } else {
-            return "login.html";
+            a = "login.html";
         }
+        return a;
     }
 
     @GetMapping("/pocetna")
@@ -51,8 +56,8 @@ public class TelemedAppController {
     public String addNewPatient(@RequestParam("newPatientName") String name, @RequestParam("newPatientLastName") String lastName,
                                 @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
                                 @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass) {
-        Patient newPatient = new Patient(patientList.size() + 1, name, lastName, dateOfBirth, oib, phoneNumber, email, pass);
-        patientList.add(newPatient);
+        User newUser = new User( name, lastName, dateOfBirth, oib, phoneNumber, email, pass,1);
+        userList.add(newUser);
         return "redirect:/doctor";
     }
 
@@ -64,14 +69,14 @@ public class TelemedAppController {
 
     @GetMapping("/doctor")
     public String patients(Model model) {
-        model.addAttribute(patientList);
+        model.addAttribute(userList);
         return "doctor.html";
     }
 
     @GetMapping("/doctorPocetna")
     public String doctorPocetna(Model model) {
-        patientList.add(patient);
-        model.addAttribute(patientList);
+        userList.add(patient);
+        model.addAttribute(userList);
         return "doctor.html";
     }
 
@@ -94,9 +99,9 @@ public class TelemedAppController {
 
     @GetMapping("/deletePatient")
     public String deletePatient(@RequestParam("patient.number") int num) {
-        for (Patient patient : patientList) {
-            if (patient.getNumber() == num) {
-                patientList.remove(patient);
+        for (User user : userList) {
+            if (user.getId() == num) {
+                userList.remove(user);
                 break;
             }
         }

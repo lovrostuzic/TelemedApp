@@ -1,6 +1,18 @@
 package com.telemedApp;
 
-public class Patient {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity(name="App_User")
+public class User {
+    static long numberCounter = 0 ;
+    @Id
+    @GeneratedValue()
+    long id;
+
+
+
     private String name;
     private String lastName;
     private String birthDate;
@@ -8,18 +20,29 @@ public class Patient {
     private String phoneNumber;
     private String email;
     private String password;
-    private int number;
+    private int pod;
 
-    public int getNumber() {
-        return number;
+    public long getId() {
+        return id;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Patient(int number, String name, String lastName, String birthDate, String oib, String phoneNumber, String email, String password) {
-        this.number = number;
+    public int getPod() {
+        return pod;
+    }
+
+    public void setPod(int pod) {
+        this.pod = pod;
+    }
+    public User(){
+
+    }
+
+    public User( String name, String lastName, String birthDate, String oib, String phoneNumber, String email, String password, int pod) {
+
         this.name = name;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -27,6 +50,9 @@ public class Patient {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+        this.pod =pod;
+
+        id = numberCounter++;
     }
 
     public String getName() {
