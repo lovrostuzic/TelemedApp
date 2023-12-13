@@ -10,13 +10,10 @@ public class Measurement {
     @GeneratedValue
     private Long id;
 
-
-    private Date date;
     private int sisPressure;
     private int dijPressure;
     private int heartbeat;
     private String desc;
-
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
@@ -30,20 +27,14 @@ public class Measurement {
         this.desc = desc;
     }
 
-    public Measurement(int measurementNumber, int sisPressure, int dijPressure, int heartbeat, String desc) {
+    public Measurement(int sisPressure, int dijPressure, int heartbeat, String desc) {
 
         this.sisPressure = sisPressure;
         this.dijPressure = dijPressure;
         this.heartbeat = heartbeat;
         this.desc = desc;
-    }
 
-    public Date getDate() {
-        return date;
-    }
 
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public int getSisPressure() {

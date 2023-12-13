@@ -1,8 +1,6 @@
 package com.telemedApp;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity(name="App_User")
 public class User {
@@ -20,7 +18,11 @@ public class User {
     private String phoneNumber;
     private String email;
     private String password;
-    private int pod;
+
+    @ManyToOne
+    @JoinColumn(name="Doctor_id")
+    private Doctor doctor;
+
 
     public long getId() {
         return id;
@@ -30,13 +32,6 @@ public class User {
         this.id = id;
     }
 
-    public int getPod() {
-        return pod;
-    }
-
-    public void setPod(int pod) {
-        this.pod = pod;
-    }
     public User(){
 
     }
@@ -50,7 +45,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.pod =pod;
 
         id = numberCounter++;
     }
