@@ -10,8 +10,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User,Long> {
 
-    @Override
-    Optional<User> findById(Long aLong);
+
+    Optional<User> findById(long aLong);
 
     List<User> findByDoctor_Id(long id);
+
+    User findByEmailAndPassword(String email, String password);
 }

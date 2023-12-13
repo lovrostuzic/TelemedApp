@@ -2,21 +2,24 @@ package com.telemedApp;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.util.Optional;
 
 @Entity
 public class Measurement {
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     private int sisPressure;
     private int dijPressure;
     private int heartbeat;
     private String desc;
     @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    @JoinColumn(name = "user_id")
+    public User user;
+
+    public Measurement() {
+    }
 
 
     public String getDesc() {
@@ -27,7 +30,7 @@ public class Measurement {
         this.desc = desc;
     }
 
-    public Measurement(int sisPressure, int dijPressure, int heartbeat, String desc) {
+    public Measurement(Optional<User> user, int sisPressure, int dijPressure, int heartbeat, String desc) {
 
         this.sisPressure = sisPressure;
         this.dijPressure = dijPressure;

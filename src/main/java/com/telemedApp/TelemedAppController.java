@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class TelemedAppController {
@@ -21,10 +22,17 @@ public class TelemedAppController {
 
 
     @GetMapping("/login")
-    public String login(@RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
-        return "login.html";
-
-
+    public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
+        User user = userRepository.findByEmailAndPassword(email, password);
+        Doctor doctor = doctorRepository.findByEmailAndPassword(email, password);
+        if (user != null) {
+            return "redirect:/patient?userId=" + user.getId();
+        } else if (doctor != null) {
+            return "redirect:/doctor?doctorId=" + doctor.getId();
+        } else {
+            model.addAttribute("userMessage", "User not found");
+            return "login.html";
+        }
     }
 
     @GetMapping("/pocetna")
@@ -33,13 +41,17 @@ public class TelemedAppController {
     }
 
     @GetMapping("/patient")
-    public String patient(Model model) {
+    public String patient(Model model, long id) {
+        Optional<User> user = userRepository.findById(id);
+        model.addAttribute(user);
+        model.addAttribute(measurementRepository.findByUser(user));
         return "patient.html";
     }
 
     @GetMapping("/addNewMeasurement")
-    public String addNewTodo(@RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
-        measurementRepository.save(new Measurement(sisPress, dijPress, heartRate, desc));
+    public String addNewTodo(long id, @RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
+       Optional<User> user = userRepository.findById(id);
+        measurementRepository.save(new Measurement(user,sisPress, dijPress, heartRate, desc));
         return "redirect:/patient";
     }
 
@@ -59,45 +71,36 @@ public class TelemedAppController {
 
     @GetMapping("/patientHistory")
     public String measurements(Model model, @RequestParam("UserId") long id) {
-        model.addAttribute(measurementRepository.findByUser_Id(id));
+        model.addAttribute("measurements", measurementRepository.findByUser_Id(id));
         return "patientHistory.html";
     }
 
     @GetMapping("/doctor")
-    public String patients(Model model, @RequestParam("DoctorId") long id ) {
-        model.addAttribute(userRepository.findById(id));
+    public String patients(Model model, @RequestParam("DoctorId") long id) {
+        model.addAttribute("user", userRepository.findById(id));
         return "doctor.html";
     }
 
     @GetMapping("/doctorPocetna")
     public String doctorPocetna(Model model, @RequestParam("DoctorId") long id) {
-                model.addAttribute(userRepository.findByDoctor_Id(id));
+        model.addAttribute(userRepository.findByDoctor_Id(id));
         return "doctor.html";
-    }}
+    }
 
-/*    public String delete(@RequestParam("measurementNumber") int mN) {
-        for (Measurement measurement : measurementRepository) {
-            if (measurement.get() == mN) {
-                measurementList.remove(measurement);
-                break;
-            }
-            return "redirect:/patientHistory";
-        }
+    public String delete(@RequestParam("MeasurementId") long measurementId) {
+        measurementRepository.deleteById(measurementId);
+        return "redirect:/patientHistory";
+    }
 
-        @GetMapping("/lookRecords")
-        public String records (Model model){
-            model.addAttribute(measurementList);
-            return "doctorPatientHistory.html";
-        }
+    @GetMapping("/lookRecords")
+    public String records(Model model, @RequestParam("userId") long id) {
+        model.addAttribute("measurements", measurementRepository.findByUser_Id(id));
+        return "doctorPatientHistory.html";
+    }
 
-        @GetMapping("/deletePatient")
-        public String deletePatient ( @RequestParam("patient.number") int num){
-            for (User user : userList) {
-                if (user.getId() == num) {
-                    userList.remove(user);
-                    break;
-                }
-            }
-            return "redirect:/doctor";
-        }
-    }*/
+    @GetMapping("/deletePatient")
+    public String deletePatient(@RequestParam("patientId") long id) {
+        userRepository.deleteById(id);
+        return "redirect:/doctor";
+    }
+}

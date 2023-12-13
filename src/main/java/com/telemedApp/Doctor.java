@@ -16,6 +16,9 @@ public class Doctor {
     private String email;
     private String password;
 
+    public Doctor() {
+    }
+
     public Doctor(String name, String lastName, String email, String password) {
         this.name = name;
         this.lastName = lastName;
