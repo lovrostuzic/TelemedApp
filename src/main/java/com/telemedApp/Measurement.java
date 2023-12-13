@@ -2,8 +2,6 @@ package com.telemedApp;
 
 import jakarta.persistence.*;
 
-import java.util.Optional;
-
 @Entity
 public class Measurement {
     @Id
@@ -30,7 +28,7 @@ public class Measurement {
         this.desc = desc;
     }
 
-    public Measurement(Optional<User> user, int sisPressure, int dijPressure, int heartbeat, String desc) {
+    public Measurement(User user, int sisPressure, int dijPressure, int heartbeat, String desc) {
 
         this.sisPressure = sisPressure;
         this.dijPressure = dijPressure;

@@ -15,4 +15,6 @@ public interface MeasurementRepository extends CrudRepository<Measurement,Long> 
     void deleteById(long aLong);
 
     List<Measurement> findByUser(Optional<User> user);
+
+    List<Measurement>findByUser(User user);
 }

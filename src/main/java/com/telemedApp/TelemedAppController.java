@@ -31,7 +31,7 @@ public class TelemedAppController {
             return "redirect:/doctor?doctorId=" + doctor.getId();
         } else {
             model.addAttribute("userMessage", "User not found");
-            return "login.html";
+            return "redirect:/pocetna";
         }
     }
 
@@ -41,17 +41,18 @@ public class TelemedAppController {
     }
 
     @GetMapping("/patient")
-    public String patient(Model model, long id) {
-        Optional<User> user = userRepository.findById(id);
+    public String patient(Model model, @RequestParam("userId") long id) {
+        User user = userRepository.findById(id);
         model.addAttribute(user);
-        model.addAttribute(measurementRepository.findByUser(user));
+        model.addAttribute("measurements", measurementRepository.findByUser(user));
+        model.addAttribute(user.getId());
         return "patient.html";
     }
 
     @GetMapping("/addNewMeasurement")
-    public String addNewTodo(long id, @RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
-       Optional<User> user = userRepository.findById(id);
-        measurementRepository.save(new Measurement(user,sisPress, dijPress, heartRate, desc));
+    public String addNewTodo(@RequestParam("userId") long id, @RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
+        User user = userRepository.findById(id);
+        measurementRepository.save(new Measurement(user, sisPress, dijPress, heartRate, desc));
         return "redirect:/patient";
     }
 
@@ -87,6 +88,7 @@ public class TelemedAppController {
         return "doctor.html";
     }
 
+    @GetMapping
     public String delete(@RequestParam("MeasurementId") long measurementId) {
         measurementRepository.deleteById(measurementId);
         return "redirect:/patientHistory";
