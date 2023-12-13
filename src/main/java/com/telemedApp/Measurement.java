@@ -1,14 +1,26 @@
 package com.telemedApp;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
 public class Measurement {
-    private int measurementNumber;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+
     private Date date;
     private int sisPressure;
     private int dijPressure;
     private int heartbeat;
     private String desc;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
 
     public String getDesc() {
         return desc;
@@ -19,19 +31,11 @@ public class Measurement {
     }
 
     public Measurement(int measurementNumber, int sisPressure, int dijPressure, int heartbeat, String desc) {
-        this.measurementNumber = measurementNumber;
+
         this.sisPressure = sisPressure;
         this.dijPressure = dijPressure;
         this.heartbeat = heartbeat;
         this.desc = desc;
-    }
-
-    public int getMeasurementNumber() {
-        return measurementNumber;
-    }
-
-    public void setMeasurementNumber(int measurementNumber) {
-        this.measurementNumber = measurementNumber;
     }
 
     public Date getDate() {

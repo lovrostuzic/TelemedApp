@@ -1,0 +1,6 @@
+package com.telemedApp;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface MeasurementRepository extends CrudRepository<Measurement,Long> {
+}
