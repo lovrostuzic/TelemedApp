@@ -4,13 +4,10 @@ import jakarta.persistence.*;
 
 @Entity(name="App_User")
 public class User {
-    static long numberCounter = 0 ;
+
     @Id
     @GeneratedValue()
     long id;
-
-
-
     private String name;
     private String lastName;
     private String birthDate;
@@ -46,7 +43,7 @@ public class User {
         this.email = email;
         this.password = password;
 
-        id = numberCounter++;
+
     }
 
     public String getName() {

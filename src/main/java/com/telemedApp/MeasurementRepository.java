@@ -9,12 +9,9 @@ import java.util.Optional;
 public interface MeasurementRepository extends CrudRepository<Measurement,Long> {
 
 
-    List<Measurement> findByUser_Id(long id);
-
-
     void deleteById(long aLong);
 
-    List<Measurement> findByUser(Optional<User> user);
+    List<Measurement> findByUserId(long userId);
 
-    List<Measurement>findByUser(User user);
+
 }
