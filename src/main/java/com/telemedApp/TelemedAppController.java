@@ -59,15 +59,18 @@ public class TelemedAppController {
     }
 
     @GetMapping("/goToNewP")
-    public String goToNewP() {
+    public String goToNewP(Model model, @RequestParam("doctorId")long id) {
+        Doctor doctor = doctorRepository.findById(id);
+        model.addAttribute("doctorId", doctor.getId());
         return "newPatient.html";
     }
 
     @GetMapping("/addNewPatient")
     public String addNewPatient(@RequestParam("newPatientName") String name, @RequestParam("newPatientLastName") String lastName,
                                 @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
-                                @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass) {
-        User newUser = new User(name, lastName, dateOfBirth, oib, phoneNumber, email, pass, 1);
+                                @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass,
+                                @RequestParam("doctorId")long id) {
+        User newUser = new User(name, lastName, dateOfBirth, oib, phoneNumber, email, pass, id);
         userRepository.save(newUser);
         return "redirect:/doctor";
     }
@@ -84,14 +87,19 @@ public class TelemedAppController {
     }
 
     @GetMapping("/doctor")
-    public String patients(Model model, @RequestParam("DoctorId") long id) {
-        model.addAttribute("user", userRepository.findById(id));
+    public String patients(Model model, @RequestParam("doctorId") long id) {
+        Doctor doctor = doctorRepository.findById(id);
+        model.addAttribute("doctorName", doctor.getName());
+        model.addAttribute("doctorLastName", doctor.getLastName());
+        model.addAttribute("doctorId", doctor.getId());
+        List<User> patientList = new ArrayList<>(userRepository.findByDoctorId(id));
+        model.addAttribute(patientList);
         return "doctor.html";
     }
 
     @GetMapping("/doctorPocetna")
     public String doctorPocetna(Model model, @RequestParam("DoctorId") long id) {
-        model.addAttribute(userRepository.findByDoctor_Id(id));
+        model.addAttribute(userRepository.findByDoctorId(id));
         return "doctor.html";
     }
 

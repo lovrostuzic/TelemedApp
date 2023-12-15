@@ -16,7 +16,7 @@
                 <div class="col-md-10">
                     <br><br>
                     <div class="col-8" style="float: left;">
-                        <h2>Mirela Grbić</h2>
+                        <h2 th:text="${doctorName + ' ' + doctorLastName}"></h2>
                     </div>
                     <div class="col-4" style="float: right;">
                         <button name="button" class="btn btn-primary" type="button">Odjava</button>
@@ -31,6 +31,7 @@
             <form action="goToNewP">
                 <br>
                 <button name="button" class="btn btn-primary" type="submit">Dodaj pacijenta</button>
+                <input type="hidden" name="doctorId" th:value="${doctorId}" />
             </form>
             <br>
             <table id="doctorsPatientList" class="table table-striped">

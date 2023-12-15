@@ -16,13 +16,18 @@ public class User {
     private String email;
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name="Doctor_id")
-    private Doctor doctor;
-
+    private long doctorId;
 
     public long getId() {
         return id;
+    }
+
+    public long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(long doctorId) {
+        this.doctorId = doctorId;
     }
 
     public void setId(int id) {
@@ -33,7 +38,7 @@ public class User {
 
     }
 
-    public User( String name, String lastName, String birthDate, String oib, String phoneNumber, String email, String password, int pod) {
+    public User( String name, String lastName, String birthDate, String oib, String phoneNumber, String email, String password, long doctorId) {
 
         this.name = name;
         this.lastName = lastName;
@@ -42,6 +47,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+        this.doctorId = id;
 
 
     }

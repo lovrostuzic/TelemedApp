@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <script src="../static/functions.js"></script>
@@ -19,7 +19,7 @@
                     <div class="row">
                         <div class="col-10">
                             <div class="col-8" style="float: left;">
-                                <h2> Mirela Grbić</h2>
+                                <h2 th:text="${doctorName + ' ' + doctorLastName}"></h2>
                             </div>
                             <div class="col-2" style="float: right;">
                                 <button name="button" class="btn btn-primary" type="button">Odjava</button>
@@ -31,22 +31,23 @@
             <h2>Dodavanje pacijenta</h2>
             <br>
             <form action="/addNewPatient">
-            <input type="text" name="newPatientName" placeholder="Ime pacijenta"><br><br>
-            <input type="text" name="newPatientLastName" placeholder="Prezime Pacijenta"><br><br>
-            <input type="text" name="dateOfBirth" placeholder="Datum rođenja"><br><br>
-            <input type="text" name="newOib" placeholder="OIB"><br><br>
-            <input type="text" name="newMobilePhone" placeholder="Broj mobitela"><br><br>
-            <input type="text" name="email" placeholder="E-mail" ><br><br>
-            <input type="text" name="password" placeholder="Password" >
-            <br><br>
-            <div class="row justify-content-end">
-                <div class="col-sm-4">
-                    <button name="button" class="btn btn-primary" type="submit">Dodaj
-                        pacijenta
-                    </button>
+                <input type="text" name="newPatientName" placeholder="Ime pacijenta"><br><br>
+                <input type="text" name="newPatientLastName" placeholder="Prezime Pacijenta"><br><br>
+                <input type="text" name="dateOfBirth" placeholder="Datum rođenja"><br><br>
+                <input type="text" name="newOib" placeholder="OIB"><br><br>
+                <input type="text" name="newMobilePhone" placeholder="Broj mobitela"><br><br>
+                <input type="text" name="email" placeholder="E-mail"><br><br>
+                <input type="text" name="password" placeholder="Password">
+                <input type="hidden" name="doctorId" th:value="${doctorId}"/>
+                <br><br>
+                <div class="row justify-content-end">
+                    <div class="col-sm-4">
+                        <button name="button" class="btn btn-primary" type="submit">Dodaj
+                            pacijenta
+                        </button>
 
+                    </div>
                 </div>
-            </div>
             </form>
         </div>
     </div>
