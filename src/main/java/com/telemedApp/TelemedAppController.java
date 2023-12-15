@@ -1,5 +1,6 @@
 package com.telemedApp;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ public class TelemedAppController {
     User user = null;
     Doctor doctor = null;
 
+    @PostConstruct
 
     @GetMapping("/login")
     public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
