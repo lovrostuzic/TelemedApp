@@ -36,4 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 
-telemeddb.mv.db
+.telemeddb.mv.db

@@ -30,7 +30,7 @@ public class TelemedAppController {
         Doctor doctorlogin = doctorRepository.findByEmailAndPassword(email, password);
         if (userlogin != null) {
             user = userRepository.findById(userlogin.getId());
-            return "redirect:/patient" ;
+            return "redirect:/patient";
         } else if (doctorlogin != null) {
             doctor = doctorRepository.findById(doctorlogin.getId());
             return "redirect:/doctor";
@@ -47,7 +47,7 @@ public class TelemedAppController {
 
     @GetMapping("/patient")
     public String patient(Model model) {
-              model.addAttribute(user);
+        model.addAttribute(user);
         model.addAttribute("measurements", measurementRepository.findByUser(user));
         model.addAttribute("userId", user.getId());
         model.addAttribute("userName", user.getName());
@@ -71,7 +71,7 @@ public class TelemedAppController {
     public String addNewPatient(@RequestParam("newPatientName") String name, @RequestParam("newPatientLastName") String lastName,
                                 @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
                                 @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass
-                               ) {
+    ) {
         User newUser = new User(name, lastName, dateOfBirth, oib, phoneNumber, email, pass, doctor);
         userRepository.save(newUser);
         return "redirect:/doctor";
@@ -79,7 +79,6 @@ public class TelemedAppController {
 
     @GetMapping("/patientHistory")
     public String measurements(Model model) {
-
         List<Measurement> measurementList = new ArrayList<>(measurementRepository.findByUser(user));
         model.addAttribute(measurementList);
         model.addAttribute("userId", user.getId());
@@ -90,11 +89,10 @@ public class TelemedAppController {
 
     @GetMapping("/doctor")
     public String patients(Model model) {
+        List<User> patientList = new ArrayList<>(userRepository.findByDoctor(doctor));
         model.addAttribute("doctorName", doctor.getName());
         model.addAttribute("doctorLastName", doctor.getLastName());
-        model.addAttribute("doctorId", doctor.getId());
-        List<User> patientList = new ArrayList<>(userRepository.findByDoctor(doctor));
-        model.addAttribute(patientList);
+        model.addAttribute("patientList", patientList);
         return "doctor.html";
     }
 
@@ -111,14 +109,26 @@ public class TelemedAppController {
     }
 
     @GetMapping("/lookRecords")
-    public String records(Model model, @RequestParam("userId") long id) {
+    public String records(Model model, @RequestParam("id") long id) {
         model.addAttribute("measurements", measurementRepository.findByUserId(id));
+        User userlook = userRepository.findById(id);
+        List<Measurement> measurementList = new ArrayList<>(measurementRepository.findByUser(userlook));
+        model.addAttribute(measurementList);
         return "doctorPatientHistory.html";
     }
 
     @GetMapping("/deletePatient")
-    public String deletePatient(@RequestParam("patientId") long id) {
+    public String deletePatient(@RequestParam("id") long id) {
         userRepository.deleteById(id);
         return "redirect:/doctor";
     }
+
+
+    @GetMapping("/logOut")
+    public String logOut(){
+        user = null;
+        doctor = null;
+        return "login.html";
+    }
+
 }
