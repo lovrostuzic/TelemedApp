@@ -12,7 +12,10 @@ public class Measurement {
     private int dijPressure;
     private int heartbeat;
     private String desc;
-    private long userId;
+    @ManyToOne
+    @JoinColumn
+    private User user;
+
 
     public Measurement() {
     }
@@ -25,13 +28,6 @@ public class Measurement {
         this.id = id;
     }
 
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
 
     public String getDesc() {
         return desc;
@@ -41,12 +37,12 @@ public class Measurement {
         this.desc = desc;
     }
 
-    public Measurement(long userId, int sisPressure, int dijPressure, int heartbeat, String desc) {
-        this.userId = userId;
+    public Measurement(int sisPressure, int dijPressure, int heartbeat, String desc, User user) {
         this.sisPressure = sisPressure;
         this.dijPressure = dijPressure;
         this.heartbeat = heartbeat;
         this.desc = desc;
+        this.user = user;
 
 
     }

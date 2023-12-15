@@ -18,4 +18,5 @@ public interface UserRepository extends CrudRepository<User,Long> {
 
     List<User> findByDoctorId(long doctorId);
 
+    List<User> findByDoctor(Doctor doctor);
 }

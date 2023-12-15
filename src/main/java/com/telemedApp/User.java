@@ -2,7 +2,7 @@ package com.telemedApp;
 
 import jakarta.persistence.*;
 
-@Entity(name="App_User")
+@Entity(name = "App_User")
 public class User {
 
     @Id
@@ -15,30 +15,24 @@ public class User {
     private String phoneNumber;
     private String email;
     private String password;
-
-    private long doctorId;
+    @ManyToOne
+    @JoinColumn(name = "doctorId")
+    private Doctor doctor;
 
     public long getId() {
         return id;
     }
 
-    public long getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(long doctorId) {
-        this.doctorId = doctorId;
-    }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public User(){
+    public User() {
 
     }
 
-    public User( String name, String lastName, String birthDate, String oib, String phoneNumber, String email, String password, long doctorId) {
+    public User(String name, String lastName, String birthDate, String oib, String phoneNumber, String email, String password, Doctor doctor) {
 
         this.name = name;
         this.lastName = lastName;
@@ -47,7 +41,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.doctorId = id;
+        this.doctor = doctor;
 
 
     }

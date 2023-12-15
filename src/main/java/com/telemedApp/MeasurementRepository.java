@@ -13,5 +13,6 @@ public interface MeasurementRepository extends CrudRepository<Measurement,Long> 
 
     List<Measurement> findByUserId(long userId);
 
+    List<Measurement> findByUser(User user);
 
 }
