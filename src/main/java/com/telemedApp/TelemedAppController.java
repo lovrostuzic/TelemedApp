@@ -58,7 +58,7 @@ public class TelemedAppController {
     @GetMapping("/addNewMeasurement")
     public String addNewTodo(@RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
         measurementRepository.save(new Measurement(sisPress, dijPress, heartRate, desc, user));
-        return "redirect:/patientHistory?userId=" + user.getId();
+        return "redirect:/patientHistory";
     }
 
     @GetMapping("/goToNewP")
@@ -109,7 +109,7 @@ public class TelemedAppController {
     }
 
     @GetMapping("/lookRecords")
-    public String records(Model model, @RequestParam("id") long id) {
+    public String lookRecords(Model model, @RequestParam("id") long id) {
         model.addAttribute("measurements", measurementRepository.findByUserId(id));
         User userlook = userRepository.findById(id);
         List<Measurement> measurementList = new ArrayList<>(measurementRepository.findByUser(userlook));

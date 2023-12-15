@@ -31,7 +31,7 @@
             <form action="goToNewP">
                 <br>
                 <button name="button" class="btn btn-primary" type="submit">Dodaj pacijenta</button>
-                <input type="hidden" name="doctorId" th:value="${doctorId}" />
+                <input type="hidden" name="doctorId" th:value="${doctorId}"/>
             </form>
             <br>
             <table id="doctorsPatientList" class="table table-striped">
@@ -40,14 +40,10 @@
                     <th>Pregledaj zapise</th>
                     <th>Izbriši</th>
                 </tr>
-                              <tr th:each="user: ${patientList}">
+                <tr th:each="user: ${patientList}">
                     <td th:text="${user.name + ' ' + user.lastName}"></td>
-                    <td>
-                        <a th:href="@{'/lookRecords?id='user.id'}">Pregledaj zapise</a>
-                    </td>
-                    <td>
-                        <a th:href="@{'/deletePatient?id='user.id'}">Izbriši</a>
-                    </td>
+                    <td><a th:href="@{/lookRecords(id=${user.id})}">Pregledaj zapise</a></td>
+                    <td><a th:href="@{/deletePatient(id=${user.id})}">Izbriši</a></td>
                 </tr>
             </table>
             <br>
