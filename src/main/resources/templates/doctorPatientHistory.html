@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <h3 th:text="${userName + ' ' + userLastName}"></h3>
+                <h3 th:text="${userName} + ' ' + ${userLastName}"></h3>
                 <p>Dijagnoza:</p>
                 <textarea id="newDiagnosis" placeholder="Napiši dijagnozu"></textarea><br>
                 <button name="button" class="btn btn-primary" type="button" onclick="addDiagnosis()">Postavi dijagnozu
