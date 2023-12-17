@@ -8,10 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 public class TelemedAppController {
@@ -29,6 +28,7 @@ public class TelemedAppController {
     Doctor doctor = null;
     SuperAdmin superAdmin = null;
 
+    //DODAVANJE U BAZU
     @PostConstruct
     public void init() {
         SuperAdmin sup = new SuperAdmin(1, "Lovro", "Stužić", "lovrostuzic@gmail.com", "lovrostuzic");
@@ -78,6 +78,7 @@ public class TelemedAppController {
 
     }
 
+    // LOGIN
     @GetMapping("/login")
     public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
         User userlogin = userRepository.findByEmailAndPassword(email, password);
@@ -103,6 +104,7 @@ public class TelemedAppController {
         return "login.html";
     }
 
+    //PACIJENT
     @GetMapping("/patient")
     public String patient(Model model) {
         model.addAttribute(user);
@@ -119,22 +121,6 @@ public class TelemedAppController {
         return "redirect:/patientHistory";
     }
 
-    @GetMapping("/goToNewP")
-    public String goToNewP(Model model) {
-        model.addAttribute("doctorId", doctor.getId());
-        return "newPatient.html";
-    }
-
-    @GetMapping("/addNewPatient")
-    public String addNewPatient(@RequestParam("newPatientName") String name, @RequestParam("newPatientLastName") String lastName,
-                                @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
-                                @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass
-    ) {
-        User newUser = new User(name, lastName, dateOfBirth, oib, phoneNumber, email, pass, doctor);
-        userRepository.save(newUser);
-        return "redirect:/doctor";
-    }
-
     @GetMapping("/patientHistory")
     public String measurements(Model model) {
         List<Measurement> measurementList = new ArrayList<>(measurementRepository.findByUser(user));
@@ -144,6 +130,27 @@ public class TelemedAppController {
         model.addAttribute("userLastName", user.getLastName());
         return "patientHistory.html";
     }
+
+    //DOKTOR
+    @GetMapping("/goToNewP")
+    public String goToNewP(Model model) {
+        model.addAttribute("doctorId", doctor.getId());
+        model.addAttribute("doctorName", doctor.getName());
+        model.addAttribute("doctorLastName", doctor.getLastName());
+        return "newPatient.html";
+    }
+
+    @GetMapping("/addNewPatient")
+    public String addNewPatient(@RequestParam("newPatientName") String name, @RequestParam("newPatientLastName") String lastName,
+                                @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
+                                @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass
+    ) {
+        User newUser = new User(name, lastName, dateOfBirth, oib, phoneNumber, email, pass, doctor);
+
+        userRepository.save(newUser);
+        return "redirect:/doctor";
+    }
+
 
     @GetMapping("/doctor")
     public String patients(Model model) {
@@ -184,15 +191,6 @@ public class TelemedAppController {
     }
 
 
-    @GetMapping("/logOut")
-    public String logOut(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.invalidate();
-        user = null;
-        doctor = null;
-        return "login.html";
-    }
-
     // SuperAdmin
     @GetMapping("/superadmin")
     public String doctors(Model model) {
@@ -222,7 +220,7 @@ public class TelemedAppController {
 
     @GetMapping("/addNewDoctor")
     public String addNewDoctor(@RequestParam("doctorName") String name, @RequestParam("doctorLastName") String lastName,
-                               @RequestParam("email") String email, @RequestParam("password") String pass,  Model model) {
+                               @RequestParam("email") String email, @RequestParam("password") String pass, Model model) {
         model.addAttribute("adminName", superAdmin.getName());
         model.addAttribute("adminLastName", superAdmin.getLastName());
         Doctor newdoctor = new Doctor(name, lastName, email, pass, superAdmin);
@@ -235,5 +233,15 @@ public class TelemedAppController {
         model.addAttribute("adminName", superAdmin.getName());
         model.addAttribute("adminLastName", superAdmin.getLastName());
         return "superAdminAddDoctor.html";
+    }
+
+    //LOGOUT
+    @GetMapping("/logOut")
+    public String logOut(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        user = null;
+        doctor = null;
+        return "login.html";
     }
 }
