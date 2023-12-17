@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <script src="../static/functions.js"></script>
@@ -22,6 +22,9 @@
             <label>Password: </label><br>
             <input type="password" id="password" placeholder="Password" name="loginPassword"><br>
             <br>
+                <div th:if="${userMessage}" class="alert alert-danger">
+                    <p th:text="${userMessage}"></p>
+                </div>
             <button name="button" class="btn btn-primary" type="submit" >Login</button>
             </form>
             <br>

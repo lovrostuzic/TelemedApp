@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,9 @@ public class TelemedAppController {
     @Autowired
     SuperAdminRepository superAdminRepository;
 
-    User user = null;
-    Doctor doctor = null;
-    SuperAdmin superAdmin = null;
+    //  User user = null;
+    //  Doctor doctor = null;
+    //  SuperAdmin superAdmin = null;
 
     //DODAVANJE U BAZU
     @PostConstruct
@@ -80,22 +81,29 @@ public class TelemedAppController {
 
     // LOGIN
     @GetMapping("/login")
-    public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
+    public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password, HttpServletRequest request) {
         User userlogin = userRepository.findByEmailAndPassword(email, password);
         Doctor doctorlogin = doctorRepository.findByEmailAndPassword(email, password);
         SuperAdmin superadminlogin = superAdminRepository.findByEmailAndPassword(email, password);
         if (userlogin != null) {
-            user = userRepository.findById(userlogin.getId());
+            User user = userRepository.findById(userlogin.getId());
+            HttpSession session = request.getSession();
+            session.setAttribute("loggedInUser", user);
             return "redirect:/patient";
         } else if (doctorlogin != null) {
-            doctor = doctorRepository.findById(doctorlogin.getId());
+            Doctor doctor = doctorRepository.findById(doctorlogin.getId());
+            HttpSession session = request.getSession();
+            session.setAttribute("loggedInDoctor", doctor);
             return "redirect:/doctor";
         } else if (superadminlogin != null) {
-            superAdmin = superadminlogin;
+            SuperAdmin superAdmin = superadminlogin;
+            HttpSession session = request.getSession();
+            session.setAttribute("loggedInSuperAdmin", superAdmin);
             return "redirect:/superadmin";
         } else {
-            model.addAttribute("userMessage", "User not found");
-            return "redirect:/pocetna";
+            model.addAttribute("userMessage", "Neuspjela prijava! Molimo pokušajte ponovo!");
+
+            return "login.html";
         }
     }
 
@@ -106,7 +114,9 @@ public class TelemedAppController {
 
     //PACIJENT
     @GetMapping("/patient")
-    public String patient(Model model) {
+    public String patient(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedInUser");
         model.addAttribute(user);
         model.addAttribute("measurements", measurementRepository.findByUser(user));
         model.addAttribute("userId", user.getId());
@@ -116,13 +126,17 @@ public class TelemedAppController {
     }
 
     @GetMapping("/addNewMeasurement")
-    public String addNewTodo(@RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
+    public String addNewTodo(HttpServletRequest request, @RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedInUser");
         measurementRepository.save(new Measurement(sisPress, dijPress, heartRate, desc, user));
         return "redirect:/patientHistory";
     }
 
     @GetMapping("/patientHistory")
-    public String measurements(Model model) {
+    public String measurements(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedInUser");
         List<Measurement> measurementList = new ArrayList<>(measurementRepository.findByUser(user));
         model.addAttribute(measurementList);
         model.addAttribute("userId", user.getId());
@@ -133,7 +147,9 @@ public class TelemedAppController {
 
     //DOKTOR
     @GetMapping("/goToNewP")
-    public String goToNewP(Model model) {
+    public String goToNewP(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
         model.addAttribute("doctorId", doctor.getId());
         model.addAttribute("doctorName", doctor.getName());
         model.addAttribute("doctorLastName", doctor.getLastName());
@@ -143,17 +159,19 @@ public class TelemedAppController {
     @GetMapping("/addNewPatient")
     public String addNewPatient(@RequestParam("newPatientName") String name, @RequestParam("newPatientLastName") String lastName,
                                 @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("newOib") String oib,
-                                @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass
-    ) {
+                                @RequestParam("newMobilePhone") String phoneNumber, @RequestParam("email") String email, @RequestParam("password") String pass,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
         User newUser = new User(name, lastName, dateOfBirth, oib, phoneNumber, email, pass, doctor);
-
         userRepository.save(newUser);
         return "redirect:/doctor";
     }
 
 
     @GetMapping("/doctor")
-    public String patients(Model model) {
+    public String patients(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
         List<User> patientList = new ArrayList<>(userRepository.findByDoctor(doctor));
         model.addAttribute("doctorName", doctor.getName());
         model.addAttribute("doctorLastName", doctor.getLastName());
@@ -162,7 +180,9 @@ public class TelemedAppController {
     }
 
     @GetMapping("/doctorPocetna")
-    public String doctorPocetna(Model model) {
+    public String doctorPocetna(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
         model.addAttribute(userRepository.findByDoctor(doctor));
         return "doctor.html";
     }
@@ -193,7 +213,9 @@ public class TelemedAppController {
 
     // SuperAdmin
     @GetMapping("/superadmin")
-    public String doctors(Model model) {
+    public String doctors(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        SuperAdmin superAdmin = (SuperAdmin) session.getAttribute("loggedInSuperAdmin");
         List<Doctor> doctorList = new ArrayList<>(doctorRepository.findBySuperadmin(superAdmin));
         model.addAttribute("adminName", superAdmin.getName());
         model.addAttribute("adminLastName", superAdmin.getLastName());
@@ -220,7 +242,9 @@ public class TelemedAppController {
 
     @GetMapping("/addNewDoctor")
     public String addNewDoctor(@RequestParam("doctorName") String name, @RequestParam("doctorLastName") String lastName,
-                               @RequestParam("email") String email, @RequestParam("password") String pass, Model model) {
+                               @RequestParam("email") String email, @RequestParam("password") String pass, Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        SuperAdmin superAdmin = (SuperAdmin) session.getAttribute("loggedInSuperAdmin");
         model.addAttribute("adminName", superAdmin.getName());
         model.addAttribute("adminLastName", superAdmin.getLastName());
         Doctor newdoctor = new Doctor(name, lastName, email, pass, superAdmin);
@@ -229,7 +253,9 @@ public class TelemedAppController {
     }
 
     @GetMapping("/addDoctor")
-    public String addDoctor(Model model) {
+    public String addDoctor(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        SuperAdmin superAdmin = (SuperAdmin) session.getAttribute("loggedInSuperAdmin");
         model.addAttribute("adminName", superAdmin.getName());
         model.addAttribute("adminLastName", superAdmin.getLastName());
         return "superAdminAddDoctor.html";
@@ -240,8 +266,6 @@ public class TelemedAppController {
     public String logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        user = null;
-        doctor = null;
         return "login.html";
     }
 }
