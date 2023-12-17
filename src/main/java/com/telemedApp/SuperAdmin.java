@@ -1,13 +1,13 @@
 package com.telemedApp;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
-import java.util.Optional;
-
-@Entity(name = "Doctor")
-public class Doctor {
+@Entity(name = "superadmin")
+public class SuperAdmin {
     @Id
-    @GeneratedValue()
+    @GeneratedValue
     long id;
 
     private String name;
@@ -15,27 +15,15 @@ public class Doctor {
     private String email;
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "superadminId")
-    private SuperAdmin superadmin;
-
-    public SuperAdmin getSuperadmin() {
-        return superadmin;
+    public SuperAdmin() {
     }
 
-    public void setSuperadmin(SuperAdmin superadmin) {
-        this.superadmin = superadmin;
-    }
-
-    public Doctor() {
-    }
-
-    public Doctor(String name, String lastName, String email, String password, SuperAdmin superAdmin) {
+    public SuperAdmin(long id, String name, String lastName, String email, String password) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.superadmin = superAdmin;
     }
 
     public long getId() {

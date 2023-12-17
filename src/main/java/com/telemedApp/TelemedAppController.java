@@ -1,6 +1,8 @@
 package com.telemedApp;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,17 +22,23 @@ public class TelemedAppController {
     MeasurementRepository measurementRepository;
     @Autowired
     DoctorRepository doctorRepository;
+    @Autowired
+    SuperAdminRepository superAdminRepository;
 
     User user = null;
     Doctor doctor = null;
+    SuperAdmin superAdmin = null;
 
     @PostConstruct
-    public void init(){
-        doctorRepository.save(new Doctor("Mirela", "Marković", "mirelamarkovic@gmail.com", "abc123"));
-        doctorRepository.save(new Doctor("Leon", "Lužni", "leonluzni@gmail.com", "abcd12"));
-        doctorRepository.save(new Doctor("Ivana", "Ivković", "ivanaivkovic@gmail.com", "abcde1"));
-        doctorRepository.save(new Doctor("Denis", "Dobrotić", "denisdobrotic@gmail.com", "abcdef"));
-        doctorRepository.save(new Doctor("Dubravko", "Dobromir", "dubravkodobromir@gmail.com", "ab1234"));
+    public void init() {
+        SuperAdmin sup = new SuperAdmin(1, "Lovro", "Stužić", "lovrostuzic@gmail.com", "lovrostuzic");
+        superAdminRepository.save(sup);
+
+        doctorRepository.save(new Doctor("Mirela", "Marković", "mirelamarkovic@gmail.com", "abc123", sup));
+        doctorRepository.save(new Doctor("Leon", "Lužni", "leonluzni@gmail.com", "abcd12", sup));
+        doctorRepository.save(new Doctor("Ivana", "Ivković", "ivanaivkovic@gmail.com", "abcde1", sup));
+        doctorRepository.save(new Doctor("Denis", "Dobrotić", "denisdobrotic@gmail.com", "abcdef", sup));
+        doctorRepository.save(new Doctor("Dubravko", "Dobromir", "dubravkodobromir@gmail.com", "ab1234", sup));
 
         userRepository.save(new User("Ivan", "Ivić", "02/15/1985", "1234567890", "123456789", "ivan@email.com", "pass123", doctorRepository.findById(1)));
         userRepository.save(new User("Ana", "Anić", "03/20/1990", "2345678901", "234567890", "ana@email.com", "pass456", doctorRepository.findById(2)));
@@ -74,12 +82,16 @@ public class TelemedAppController {
     public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password) {
         User userlogin = userRepository.findByEmailAndPassword(email, password);
         Doctor doctorlogin = doctorRepository.findByEmailAndPassword(email, password);
+        SuperAdmin superadminlogin = superAdminRepository.findByEmailAndPassword(email, password);
         if (userlogin != null) {
             user = userRepository.findById(userlogin.getId());
             return "redirect:/patient";
         } else if (doctorlogin != null) {
             doctor = doctorRepository.findById(doctorlogin.getId());
             return "redirect:/doctor";
+        } else if (superadminlogin != null) {
+            superAdmin = superadminlogin;
+            return "redirect:/superadmin";
         } else {
             model.addAttribute("userMessage", "User not found");
             return "redirect:/pocetna";
@@ -161,7 +173,7 @@ public class TelemedAppController {
         model.addAttribute("userName", userlook.getName());
         model.addAttribute("userLastName", userlook.getLastName());
         List<Measurement> measurementList = new ArrayList<>(measurementRepository.findByUser(userlook));
-        model.addAttribute(measurementList);
+        model.addAttribute("measurementList", measurementList);
         return "doctorPatientHistory.html";
     }
 
@@ -173,10 +185,55 @@ public class TelemedAppController {
 
 
     @GetMapping("/logOut")
-    public String logOut(){
+    public String logOut(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
         user = null;
         doctor = null;
         return "login.html";
     }
 
+    // SuperAdmin
+    @GetMapping("/superadmin")
+    public String doctors(Model model) {
+        List<Doctor> doctorList = new ArrayList<>(doctorRepository.findBySuperadmin(superAdmin));
+        model.addAttribute("adminName", superAdmin.getName());
+        model.addAttribute("adminLastName", superAdmin.getLastName());
+        model.addAttribute("doctorList", doctorList);
+        return "superAdmin.html";
+    }
+
+    @GetMapping("/lookDoctorRecords")
+    public String lookDoctorRecords(Model model, @RequestParam("id") long id) {
+        model.addAttribute("patients", userRepository.findByDoctor_Id(id));
+        Doctor doctorlook = doctorRepository.findById(id);
+        model.addAttribute("doctorName", doctorlook.getName());
+        model.addAttribute("doctorLastName", doctorlook.getLastName());
+        List<User> userList = new ArrayList<>(userRepository.findByDoctor(doctorlook));
+        model.addAttribute("userList", userList);
+        return "superAdminlooksDoctors.html";
+    }
+
+    @GetMapping("/deleteDoctor")
+    public String deleteDoctor(@RequestParam("id") long id) {
+        doctorRepository.deleteById(id);
+        return "redirect:/superadmin";
+    }
+
+    @GetMapping("/addNewDoctor")
+    public String addNewDoctor(@RequestParam("doctorName") String name, @RequestParam("doctorLastName") String lastName,
+                               @RequestParam("email") String email, @RequestParam("password") String pass,  Model model) {
+        model.addAttribute("adminName", superAdmin.getName());
+        model.addAttribute("adminLastName", superAdmin.getLastName());
+        Doctor newdoctor = new Doctor(name, lastName, email, pass, superAdmin);
+        doctorRepository.save(newdoctor);
+        return "redirect:/superadmin";
+    }
+
+    @GetMapping("/addDoctor")
+    public String addDoctor(Model model) {
+        model.addAttribute("adminName", superAdmin.getName());
+        model.addAttribute("adminLastName", superAdmin.getLastName());
+        return "superAdminAddDoctor.html";
+    }
 }
