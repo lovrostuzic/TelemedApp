@@ -9,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +29,7 @@ public class TelemedAppController {
     @Autowired
     SuperAdminRepository superAdminRepository;
 
+    private static final String usbFilePath = "/media/usb/password.txt";
     //  User user = null;
     //  Doctor doctor = null;
     //  SuperAdmin superAdmin = null;
@@ -85,6 +90,7 @@ public class TelemedAppController {
         User userlogin = userRepository.findByEmailAndPassword(email, password);
         Doctor doctorlogin = doctorRepository.findByEmailAndPassword(email, password);
         SuperAdmin superadminlogin = superAdminRepository.findByEmailAndPassword(email, password);
+      //  boolean usb = checkUsb();
         if (userlogin != null) {
             User user = userRepository.findById(userlogin.getId());
             HttpSession session = request.getSession();
@@ -126,7 +132,7 @@ public class TelemedAppController {
             model.addAttribute("userLastName", user.getLastName());
             return "patient.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
         }
     }
 
@@ -152,7 +158,7 @@ public class TelemedAppController {
             model.addAttribute("userLastName", user.getLastName());
             return "patientHistory.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
         }
     }
 
@@ -175,11 +181,9 @@ public class TelemedAppController {
             model.addAttribute("doctorLastName", doctor.getLastName());
             return "newPatient.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
-
-
     }
 
     @GetMapping("/addNewPatient")
@@ -195,42 +199,36 @@ public class TelemedAppController {
 
     @GetMapping("/doctor")
     public String patients(Model model, HttpServletRequest request) {
-        Object loggedInDoctor = request.getSession().getAttribute("loggedInDoctor");
+        Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
         if (loggedInDoctor != null) {
-            HttpSession session = request.getSession();
-            Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
-            List<User> patientList = new ArrayList<>(userRepository.findByDoctor(doctor));
-            model.addAttribute("doctorName", doctor.getName());
-            model.addAttribute("doctorLastName", doctor.getLastName());
+            List<User> patientList = new ArrayList<>(userRepository.findByDoctor(loggedInDoctor));
+            model.addAttribute("doctorName", loggedInDoctor.getName());
+            model.addAttribute("doctorLastName", loggedInDoctor.getLastName());
             model.addAttribute("patientList", patientList);
             return "doctor.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
-
-
     }
 
     @GetMapping("/doctorPocetna")
     public String doctorPocetna(Model model, HttpServletRequest request) {
-        Object loggedInDoctor = request.getSession().getAttribute("loggedInDoctor");
+        Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
         if (loggedInDoctor != null) {
             HttpSession session = request.getSession();
-            Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
-            model.addAttribute(userRepository.findByDoctor(doctor));
+            model.addAttribute(userRepository.findByDoctor(loggedInDoctor));
             return "doctor.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
 
     }
 
-
     @GetMapping("/lookRecords")
     public String lookRecords(Model model, @RequestParam("id") long id, HttpServletRequest request) {
-        Object loggedInDoctor = request.getSession().getAttribute("loggedInDoctor");
+        Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
         if (loggedInDoctor != null) {
             model.addAttribute("measurements", measurementRepository.findByUserId(id));
             User userlook = userRepository.findById(id);
@@ -240,7 +238,7 @@ public class TelemedAppController {
             model.addAttribute("measurementList", measurementList);
             return "doctorPatientHistory.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
 
@@ -249,19 +247,18 @@ public class TelemedAppController {
 
     @GetMapping("/deletePatient")
     public String deletePatient(@RequestParam("id") long id, HttpServletRequest request, Model model) {
-        Object loggedInDoctor = request.getSession().getAttribute("loggedInDoctor");
+      Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
         if (loggedInDoctor != null) {
             measurementRepository.deleteByUser(userRepository.findById(id));
             userRepository.deleteById(id);
             model.addAttribute("userMessage", "Pacijent obrisan!");
             return "redirect:/doctor";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
 
     }
-
 
     // SuperAdmin
     @GetMapping("/superadmin")
@@ -287,8 +284,8 @@ public class TelemedAppController {
     }
 
     @GetMapping("/deleteDoctor")
-    public String deleteDoctor(@RequestParam("id") long id, HttpServletRequest request,Model model) {
-        Object loggedInSuperAdmin = request.getSession().getAttribute("loggedInSuperAdmin");
+    public String deleteDoctor(@RequestParam("id") long id, HttpServletRequest request, Model model) {
+        SuperAdmin loggedInSuperAdmin = (SuperAdmin) request.getSession().getAttribute("loggedInSuperAdmin");
         if (loggedInSuperAdmin != null) {
             Doctor doctornull = null;
             userRepository.updateDoctorByDoctor(doctornull, doctorRepository.findById(id));
@@ -296,7 +293,7 @@ public class TelemedAppController {
             model.addAttribute("userMessage", "Doktor obrisan!");
             return "redirect:/superadmin";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
 
@@ -305,33 +302,30 @@ public class TelemedAppController {
     @GetMapping("/addNewDoctor")
     public String addNewDoctor(@RequestParam("doctorName") String name, @RequestParam("doctorLastName") String lastName,
                                @RequestParam("email") String email, @RequestParam("password") String pass, Model model, HttpServletRequest request) {
-        Object loggedInSuperAdmin = request.getSession().getAttribute("loggedInSuperAdmin");
+        SuperAdmin loggedInSuperAdmin = (SuperAdmin) request.getSession().getAttribute("loggedInSuperAdmin");
         if (loggedInSuperAdmin != null) {
             HttpSession session = request.getSession();
-            SuperAdmin superAdmin = (SuperAdmin) session.getAttribute("loggedInSuperAdmin");
-            model.addAttribute("adminName", superAdmin.getName());
-            model.addAttribute("adminLastName", superAdmin.getLastName());
-            Doctor newdoctor = new Doctor(name, lastName, email, pass, superAdmin);
+            model.addAttribute("adminName", loggedInSuperAdmin.getName());
+            model.addAttribute("adminLastName", loggedInSuperAdmin.getLastName());
+            Doctor newdoctor = new Doctor(name, lastName, email, pass, loggedInSuperAdmin);
             doctorRepository.save(newdoctor);
             model.addAttribute("userMessage", "Doktor dodan!");
             return "superAdminAddDoctor.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
         }
 
     }
 
     @GetMapping("/addDoctor")
     public String addDoctor(Model model, HttpServletRequest request) {
-        Object loggedInSuperAdmin = request.getSession().getAttribute("loggedInSuperAdmin");
+       SuperAdmin loggedInSuperAdmin = (SuperAdmin) request.getSession().getAttribute("loggedInSuperAdmin");
         if (loggedInSuperAdmin != null) {
-            HttpSession session = request.getSession();
-            SuperAdmin superAdmin = (SuperAdmin) session.getAttribute("loggedInSuperAdmin");
-            model.addAttribute("adminName", superAdmin.getName());
-            model.addAttribute("adminLastName", superAdmin.getLastName());
+            model.addAttribute("adminName", loggedInSuperAdmin.getName());
+            model.addAttribute("adminLastName", loggedInSuperAdmin.getLastName());
             return "superAdminAddDoctor.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
     }
@@ -341,34 +335,53 @@ public class TelemedAppController {
     public String logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return "login.html";
+        return "redirect:/pocetna";
     }
 
     //SEARCH
     @GetMapping("/search")
     public String search(Model model, HttpServletRequest request, @RequestParam("searchTerm") String searchTerm) {
-        Object loggedInDoctor = request.getSession().getAttribute("loggedInDoctor");
+        Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
         if (loggedInDoctor != null) {
-            HttpSession session = request.getSession();
-            Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+
             String[] parts = searchTerm.split(" ");
             String name = parts[0];
             String lastName = (parts.length > 1) ? parts[1] : "";
             List<User> patientList;
             if (!lastName.isEmpty()) {
-                patientList = new ArrayList<>(userRepository.findByDoctorAndNameAndLastNameOrderByNameAsc(doctor, name, lastName));
+                patientList = new ArrayList<>(userRepository.findByDoctorAndNameAndLastNameOrderByNameAsc(loggedInDoctor, name, lastName));
             } else {
-                patientList = new ArrayList<>(userRepository.findByDoctorAndNameOrLastNameOrderByNameAsc(doctor, name, name));
+                patientList = new ArrayList<>(userRepository.findByDoctorAndNameOrLastNameOrderByNameAsc(loggedInDoctor, name, name));
             }
-            model.addAttribute("doctorName", doctor.getName());
-            model.addAttribute("doctorLastName", doctor.getLastName());
+            model.addAttribute("doctorName", loggedInDoctor.getName());
+            model.addAttribute("doctorLastName",loggedInDoctor.getLastName());
             model.addAttribute("patientList", patientList);
             return "doctor.html";
         } else {
-            return "redirect:/login";
+            return "redirect:/pocetna";
 
         }
 
     }
+
+    // NE DIRAJ ZONA
+    private boolean checkUsb() {
+        File usbFile = new File(usbFilePath);
+        if (usbFile.exists() && usbFile.isFile()) {
+            try {
+                String passwordFromUSB = new String(Files.readAllBytes(Paths.get(usbFilePath)));
+                String expectedPassword = "ExtraJakiPasword9000";
+                if (passwordFromUSB.equals(expectedPassword)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
+        return false;
+    }
+
 
 }
