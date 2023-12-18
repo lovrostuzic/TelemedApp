@@ -101,7 +101,7 @@ public class TelemedAppController {
         User userlogin = userRepository.findByEmailAndPassword(email, password);
         Doctor doctorlogin = doctorRepository.findByEmailAndPassword(email, password);
         SuperAdmin superadminlogin = superAdminRepository.findByEmailAndPassword(email, password);
-        boolean usb = checkUsb();
+      //  boolean usb = checkUsb();
         if (userlogin != null) {
             User user = userRepository.findById(userlogin.getId());
             HttpSession session = request.getSession();
@@ -112,7 +112,7 @@ public class TelemedAppController {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInDoctor", doctor);
             return "redirect:/doctor";
-        } else if (superadminlogin != null && usb) {
+        } else if (superadminlogin != null) {
             SuperAdmin superAdmin = superadminlogin;
             HttpSession session = request.getSession();
             session.setAttribute("loggedInSuperAdmin", superAdmin);
@@ -147,15 +147,21 @@ public class TelemedAppController {
 
     @GetMapping("/addNewMeasurement")
     public String addNewTodo(Model model, HttpServletRequest request, @RequestParam("sisPress") int sisPress, @RequestParam("dijPress") int dijPress, @RequestParam("heartRate") int heartRate, @RequestParam("desc") String desc) {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("loggedInUser");
-        measurementRepository.save(new Measurement(sisPress, dijPress, heartRate, desc, user));
-        model.addAttribute("measurements", measurementRepository.findByUser(user));
-        model.addAttribute("userId", user.getId());
-        model.addAttribute("userName", user.getName());
-        model.addAttribute("userLastName", user.getLastName());
-        model.addAttribute("userMessage", "Podaci zaprimljeni!");
-        return "patient.html";
+        Object loggedInUser = request.getSession().getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("loggedInUser");
+            measurementRepository.save(new Measurement(sisPress, dijPress, heartRate, desc, user));
+            model.addAttribute("measurements", measurementRepository.findByUser(user));
+            model.addAttribute("userId", user.getId());
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("userLastName", user.getLastName());
+            model.addAttribute("userMessage", "Podaci zaprimljeni!");
+            return "patient.html";
+        } else {
+            return "redirect:/pocetna";
+        }
+
     }
 
     @GetMapping("/patientHistory")

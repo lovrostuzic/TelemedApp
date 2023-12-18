@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <script src="../static/functions.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <title>PatientHistory</title>
+</head>
+<body>
+<header class="page-header">
+</header>
+<div class="container">
+    <div class="row justify-content-start">
+        <div class="col-md-10">
+            <br>
+            <div class="container">
+                <div class="row">
+                    <div class="row justify-content-start">
+                        <div class="col-10">
+                            <div class="col-8" style="float: left;">
+                                <h2>Povijest pacijenta:</h2>
+                                <h3 th:text="${userName + ' ' + userLastName}"></h3>
+                            </div>
+                        </div>
+                        <div class="col-2" style="float: right;">
+                            <form action="/logOut">
+                                <button name="button" class="btn btn-primary" type="submit">Odjava</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            <table id="patient_table" class="table table-striped">
+                <tr>
+                    <th>Broj mjerenja:</th>
+                    <th>Datum:</th>
+                    <th>Sistolički tlak:</th>
+                    <th>Dijastolički tlak:</th>
+                    <th>Broj otkucaja srca:</th>
+                    <th>Opis:</th>
+                    <th>Izbriš:</th>
+
+                </tr>
+                <input type="hidden" name="userId" th:value="${userId}" />
+                <tr th:each="measurement: ${measurementList}">
+                    <td th:text="${measurement.id}"></td>
+                    <td th:text="${measurement.date}"></td>
+                    <td th:text="${measurement.sisPressure}"></td>
+                    <td th:text="${measurement.dijPressure}"></td>
+                    <td th:text="${measurement.heartbeat}"></td>
+                    <td th:text="${measurement.desc}"></td>
+                    <td><a th:href="@{'/delete?mid=' + ${measurement.id} + '&id=' + ${userId}}">Izbriši</a></td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    .form-element{
+     display: inline-block;
+     width: 150px;
+     margin: 5px 0;
+   }
+
+ .btn-primary {
+     background-color: red;
+     border-color: red;
+  }
+  .btn-primary:hover {
+   transform: scale(1.01);
+  transition: transform 0.3s ease;
+      background-color: darkred;
+      border-color: darkred;
+   }
+ textarea {
+     width: 500px;
+     resize: vertical;
+       min-height: 100px;
+   }
+   body {
+        background-color: red;
+   }
+
+  .container {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  color: #333;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+</style>
+</html>
