@@ -310,7 +310,7 @@ public class TelemedAppController {
             userRepository.updateDoctorByDoctor(doctornull, doctorRepository.findById(id));
             doctorRepository.deleteById(id);
             model.addAttribute("userMessage", "Doktor obrisan!");
-            return "redirect:/superadmin";
+            return "redirect:/superAdmin.html";
         } else {
             return "redirect:/pocetna";
 

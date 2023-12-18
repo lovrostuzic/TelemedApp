@@ -33,3 +33,5 @@ out/
 .vscode/
 
 .telemeddb.mv.db
+/.gradle/
+/.idea/
