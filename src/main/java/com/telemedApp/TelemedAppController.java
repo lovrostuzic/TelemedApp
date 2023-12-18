@@ -125,7 +125,6 @@ public class TelemedAppController {
         if (loggedInUser != null) {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("loggedInUser");
-            model.addAttribute(user);
             model.addAttribute("measurements", measurementRepository.findByUser(user));
             model.addAttribute("userId", user.getId());
             model.addAttribute("userName", user.getName());
@@ -141,8 +140,13 @@ public class TelemedAppController {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loggedInUser");
         measurementRepository.save(new Measurement(sisPress, dijPress, heartRate, desc, user));
+        model.addAttribute("measurements", measurementRepository.findByUser(user));
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("userName", user.getName());
+        model.addAttribute("userLastName", user.getLastName());
         model.addAttribute("userMessage", "Podaci zaprimljeni!");
-        return "redirect:/patient";
+
+        return "patient.html";
     }
 
     @GetMapping("/patientHistory")
