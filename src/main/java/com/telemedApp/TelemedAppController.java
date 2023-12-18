@@ -29,7 +29,7 @@ public class TelemedAppController {
     @Autowired
     SuperAdminRepository superAdminRepository;
 
-    private static final String usbFilePath = "/media/usb/password.txt";
+    private static final String usbFilePath = "G:\\password.txt";
     //  User user = null;
     //  Doctor doctor = null;
     //  SuperAdmin superAdmin = null;
@@ -95,23 +95,13 @@ public class TelemedAppController {
         }
     }
 
-    private Measurement createRandomMeasurement(User user) {
-        int sisPressure = (int) (Math.random() * 40) + 90;  // 90-130 mmHg
-        int dijPressure = (int) (Math.random() * 20) + 60;  // 60-80 mmHg
-        int heartbeat = (int) (Math.random() * 50) + 50;     // 50-100 otkucaja/min
-        String desc = "Napomena o mjerenju " + (int) (Math.random() * 100);
-
-        return new Measurement(sisPressure, dijPressure, heartbeat, desc, user);
-    }
-
-
     // LOGIN
     @GetMapping("/login")
     public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password, HttpServletRequest request) {
         User userlogin = userRepository.findByEmailAndPassword(email, password);
         Doctor doctorlogin = doctorRepository.findByEmailAndPassword(email, password);
         SuperAdmin superadminlogin = superAdminRepository.findByEmailAndPassword(email, password);
-      //  boolean usb = checkUsb();
+      boolean usb = checkUsb();
         if (userlogin != null) {
             User user = userRepository.findById(userlogin.getId());
             HttpSession session = request.getSession();
@@ -122,14 +112,13 @@ public class TelemedAppController {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInDoctor", doctor);
             return "redirect:/doctor";
-        } else if (superadminlogin != null) {
+        } else if (superadminlogin != null&&usb) {
             SuperAdmin superAdmin = superadminlogin;
             HttpSession session = request.getSession();
             session.setAttribute("loggedInSuperAdmin", superAdmin);
             return "redirect:/superadmin";
         } else {
             model.addAttribute("userMessage", "Neuspjela prijava! Molimo pokušajte ponovo!");
-
             return "login.html";
         }
     }
@@ -166,7 +155,6 @@ public class TelemedAppController {
         model.addAttribute("userName", user.getName());
         model.addAttribute("userLastName", user.getLastName());
         model.addAttribute("userMessage", "Podaci zaprimljeni!");
-
         return "patient.html";
     }
 
@@ -368,7 +356,6 @@ public class TelemedAppController {
     public String search(Model model, HttpServletRequest request, @RequestParam("searchTerm") String searchTerm) {
         Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
         if (loggedInDoctor != null) {
-
             String[] parts = searchTerm.split(" ");
             String name = parts[0];
             String lastName = (parts.length > 1) ? parts[1] : "";
@@ -392,21 +379,29 @@ public class TelemedAppController {
     // NE DIRAJ ZONA
     private boolean checkUsb() {
         File usbFile = new File(usbFilePath);
-        if (usbFile.exists() && usbFile.isFile()) {
+        boolean usb = false ;
+        if (usbFile.exists()) {
             try {
                 String passwordFromUSB = new String(Files.readAllBytes(Paths.get(usbFilePath)));
                 String expectedPassword = "ExtraJakiPasword9000";
                 if (passwordFromUSB.equals(expectedPassword)) {
-                    return true;
+                    usb=true;
                 } else {
-                    return false;
+                    usb=false;
                 }
             } catch (IOException e) {
                 System.out.println(e);
             }
         }
-        return false;
+        return usb;
     }
 
+    private Measurement createRandomMeasurement(User user) {
+        int sisPressure = (int) (Math.random() * 40) + 90;  // 90-130 mmHg
+        int dijPressure = (int) (Math.random() * 20) + 60;  // 60-80 mmHg
+        int heartbeat = (int) (Math.random() * 50) + 50;     // 50-100 otkucaja/min
+        String desc = "Napomena o mjerenju " + (int) (Math.random() * 100);
+        return new Measurement(sisPressure, dijPressure, heartbeat, desc, user);
+    }
 
 }
