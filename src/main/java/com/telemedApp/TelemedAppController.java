@@ -4,10 +4,12 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +96,9 @@ public class TelemedAppController {
             }
         }
     }
-
+@PostConstruct
+public void run(ApplicationArguments args) throws Exception {
+    RedirectView redirectView = new RedirectView("/pocetna");}
     // LOGIN
     @GetMapping("/login")
     public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password, HttpServletRequest request) {
