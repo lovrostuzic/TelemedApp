@@ -84,6 +84,27 @@ public class TelemedAppController {
 
     }
 
+    @PostConstruct
+    public void addMeasurementsForUsers() {
+        Iterable<User> users = userRepository.findAll();
+        for (User user : users) {
+            for (int i = 0; i < 10; i++) {
+                Measurement measurement = createRandomMeasurement(user);
+                measurementRepository.save(measurement);
+            }
+        }
+    }
+
+    private Measurement createRandomMeasurement(User user) {
+        int sisPressure = (int) (Math.random() * 40) + 90;  // 90-130 mmHg
+        int dijPressure = (int) (Math.random() * 20) + 60;  // 60-80 mmHg
+        int heartbeat = (int) (Math.random() * 50) + 50;     // 50-100 otkucaja/min
+        String desc = "Napomena o mjerenju " + (int) (Math.random() * 100);
+
+        return new Measurement(sisPressure, dijPressure, heartbeat, desc, user);
+    }
+
+
     // LOGIN
     @GetMapping("/login")
     public String login(Model model, @RequestParam("loginMail") String email, @RequestParam("loginPassword") String password, HttpServletRequest request) {
