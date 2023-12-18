@@ -310,7 +310,12 @@ public class TelemedAppController {
             userRepository.updateDoctorByDoctor(doctornull, doctorRepository.findById(id));
             doctorRepository.deleteById(id);
             model.addAttribute("userMessage", "Doktor obrisan!");
-            return "redirect:/superAdmin.html";
+            List<Doctor> doctorList = new ArrayList<>(doctorRepository.findBySuperadmin(loggedInSuperAdmin));
+            model.addAttribute("adminName", loggedInSuperAdmin.getName());
+            model.addAttribute("adminLastName", loggedInSuperAdmin.getLastName());
+            model.addAttribute("doctorList", doctorList);
+
+            return "superAdmin.html";
         } else {
             return "redirect:/pocetna";
 
