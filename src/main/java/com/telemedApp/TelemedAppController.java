@@ -101,7 +101,7 @@ public class TelemedAppController {
         User userlogin = userRepository.findByEmailAndPassword(email, password);
         Doctor doctorlogin = doctorRepository.findByEmailAndPassword(email, password);
         SuperAdmin superadminlogin = superAdminRepository.findByEmailAndPassword(email, password);
-      boolean usb = checkUsb();
+        boolean usb = checkUsb();
         if (userlogin != null) {
             User user = userRepository.findById(userlogin.getId());
             HttpSession session = request.getSession();
@@ -112,7 +112,7 @@ public class TelemedAppController {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInDoctor", doctor);
             return "redirect:/doctor";
-        } else if (superadminlogin != null&&usb) {
+        } else if (superadminlogin != null && usb) {
             SuperAdmin superAdmin = superadminlogin;
             HttpSession session = request.getSession();
             session.setAttribute("loggedInSuperAdmin", superAdmin);
@@ -260,7 +260,7 @@ public class TelemedAppController {
 
     @GetMapping("/deletePatient")
     public String deletePatient(@RequestParam("id") long id, HttpServletRequest request, Model model) {
-      Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
+        Doctor loggedInDoctor = (Doctor) request.getSession().getAttribute("loggedInDoctor");
         if (loggedInDoctor != null) {
             measurementRepository.deleteByUser(userRepository.findById(id));
             userRepository.deleteById(id);
@@ -332,7 +332,7 @@ public class TelemedAppController {
 
     @GetMapping("/addDoctor")
     public String addDoctor(Model model, HttpServletRequest request) {
-       SuperAdmin loggedInSuperAdmin = (SuperAdmin) request.getSession().getAttribute("loggedInSuperAdmin");
+        SuperAdmin loggedInSuperAdmin = (SuperAdmin) request.getSession().getAttribute("loggedInSuperAdmin");
         if (loggedInSuperAdmin != null) {
             model.addAttribute("adminName", loggedInSuperAdmin.getName());
             model.addAttribute("adminLastName", loggedInSuperAdmin.getLastName());
@@ -348,6 +348,9 @@ public class TelemedAppController {
     public String logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
+        // user = null;
+        // doctor = null
+        // superAdmin = null;
         return "redirect:/pocetna";
     }
 
@@ -366,7 +369,7 @@ public class TelemedAppController {
                 patientList = new ArrayList<>(userRepository.findByDoctorAndNameOrLastNameOrderByNameAsc(loggedInDoctor, name, name));
             }
             model.addAttribute("doctorName", loggedInDoctor.getName());
-            model.addAttribute("doctorLastName",loggedInDoctor.getLastName());
+            model.addAttribute("doctorLastName", loggedInDoctor.getLastName());
             model.addAttribute("patientList", patientList);
             return "doctor.html";
         } else {
@@ -379,15 +382,15 @@ public class TelemedAppController {
     // NE DIRAJ ZONA
     private boolean checkUsb() {
         File usbFile = new File(usbFilePath);
-        boolean usb = false ;
+        boolean usb = false;
         if (usbFile.exists()) {
             try {
                 String passwordFromUSB = new String(Files.readAllBytes(Paths.get(usbFilePath)));
                 String expectedPassword = "ExtraJakiPasword9000";
                 if (passwordFromUSB.equals(expectedPassword)) {
-                    usb=true;
+                    usb = true;
                 } else {
-                    usb=false;
+                    usb = false;
                 }
             } catch (IOException e) {
                 System.out.println(e);
@@ -403,5 +406,6 @@ public class TelemedAppController {
         String desc = "Napomena o mjerenju " + (int) (Math.random() * 100);
         return new Measurement(sisPressure, dijPressure, heartbeat, desc, user);
     }
+
 
 }
