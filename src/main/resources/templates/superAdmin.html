@@ -27,6 +27,9 @@
             </div>
             <br>
             <h3>Popis doktora</h3><br>
+            <div th:if="${userMessage}" class="alert alert-danger">
+                <p th:text="${userMessage}"></p>
+            </div>
             <form action="/addDoctor">
                 <br>
                 <button name="button" class="btn btn-primary" type="submit">Dodaj doktora</button>

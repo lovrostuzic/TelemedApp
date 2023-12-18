@@ -7,7 +7,6 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/style.css">
     <title>Dodavanje pacijenta</title>
-
 </head>
 <body>
 <div class="container">
@@ -30,14 +29,16 @@
                     </div>
                 </div>
             </div>
-            <h2>Dodavanje pacijenta</h2>
+            <div th:if="${userMessage}" class="alert alert-danger">
+                <p th:text="${userMessage}"></p>
+            </div>
+            <h2>Dodavanje doktora</h2>
             <br>
             <form action="/addNewDoctor">
                 <input type="text" name="doctorName" placeholder="Ime doktora"><br><br>
                 <input type="text" name="doctorLastName" placeholder="Prezime doktora"><br><br>
                 <input type="text" name="email" placeholder="E-mail"><br><br>
                 <input type="text" name="password" placeholder="Password">
-
                 <br><br>
                 <div class="row justify-content-end">
                     <div class="col-sm-4">

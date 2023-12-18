@@ -2,6 +2,9 @@ package com.telemedApp;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Entity
 public class Measurement {
     @Id
@@ -11,11 +14,28 @@ public class Measurement {
     private int sisPressure;
     private int dijPressure;
     private int heartbeat;
+    @Column(length = 1000)
     private String desc;
+    private String date;
     @ManyToOne
     @JoinColumn
     private User user;
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Measurement() {
     }
@@ -42,6 +62,10 @@ public class Measurement {
         this.dijPressure = dijPressure;
         this.heartbeat = heartbeat;
         this.desc = desc;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = localDateTime.format(formatter);
+        this.date = formattedDateTime;
         this.user = user;
 
 

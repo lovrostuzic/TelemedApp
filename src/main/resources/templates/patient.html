@@ -33,6 +33,9 @@
                 <button name="button" class="btn btn-primary" type="submit">Prikaži povijest</button>
                 <input type="hidden" name="userId" th:value="${userId}" />
             </form>
+            <div th:if="${userMessage}" class="alert alert-danger">
+                <p th:text="${userMessage}"></p>
+            </div>
             <div class="container">
                 <div class="row">
                     <div class="row justify-content-start">
@@ -51,7 +54,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
                                 <p>Kratki opis:</p>
                                 <textarea id="description" placeholder="Kratki opis" name="desc"></textarea><br><br>
                                 <button name="button" class="btn btn-primary" type="submit">Podnesi
@@ -66,7 +68,6 @@
     </div>
 </div>
 </body>
-
 <style>
     .form-element{
       display: inline-block;

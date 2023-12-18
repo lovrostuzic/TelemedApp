@@ -26,12 +26,19 @@
                 </div>
             </div>
             <br>
-            <h3>Popis pacijenata:</h3>
+            <div th:if="${userMessage}" class="alert alert-danger">
+                <p th:text="${userMessage}"></p>
+            </div>
+            <form action="/search">
+                <input type="text" id="search" name="searchTerm" placeholder="Ime i prezime">
+                <button name="button" class="btn btn-primary" type="submit">Traži</button>
+            </form>
             <form action="goToNewP">
                 <br>
                 <button name="button" class="btn btn-primary" type="submit">Dodaj pacijenta</button>
                 <input type="hidden" name="doctorId" th:value="${doctorId}"/>
             </form>
+            <h3>Popis pacijenata:</h3>
             <br>
             <table id="doctorsPatientList" class="table table-striped">
                 <tr>
