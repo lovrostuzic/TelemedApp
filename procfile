@@ -1,1 +1,1 @@
-web:java -dserver .port=$port$java_opts -jar build/libs/telemedapp-0.0.1-snapshot.jar
+web:java -dserver .port=$port$java_opts -jar build/libs/pocetna-0.0.1-snapshot.jar
