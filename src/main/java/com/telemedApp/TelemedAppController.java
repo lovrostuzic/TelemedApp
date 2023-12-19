@@ -123,13 +123,13 @@ public void run(ApplicationArguments args) throws Exception {
             return "redirect:/superadmin";
         } else {
             model.addAttribute("userMessage", "Neuspjela prijava! Molimo pokušajte ponovo!");
-            return "login.html";
+            return "index.html";
         }
     }
 
     @GetMapping("/pocetna")
     public String pocetna() {
-        return "login.html";
+        return "index.html";
     }
 
     //PACIJENT
